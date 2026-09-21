@@ -1,9 +1,11 @@
 import Link from "next/link";
+import ProjectVisual from "@/app/components/ProjectVisual";
 
 export default function InventoryManagementApiPage() {
   return (
     <main className="min-h-screen bg-[#F5F3EE] text-[#111111]">
 
+      {/* NAVBAR */}
       <nav className="sticky top-0 z-50 border-b border-[#111111]/10 bg-[#F5F3EE]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
           <Link
@@ -22,34 +24,43 @@ export default function InventoryManagementApiPage() {
         </div>
       </nav>
 
+      {/* HERO */}
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
           Project 02 — Backend
         </p>
 
         <div className="mt-8 grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
-
           <h1 className="font-[var(--font-space-grotesk)] text-5xl font-bold leading-[0.9] tracking-[-0.07em] md:text-7xl lg:text-8xl">
             Inventory
             <br />
-            <span className="text-[#FF5C35]">Management API.</span>
+            <span className="text-[#FF5C35]">
+              Management API.
+            </span>
           </h1>
 
           <p className="max-w-md text-base leading-8 text-[#6B6B6B] md:text-lg">
             API untuk mengelola master data, stok, transaksi IN/OUT,
             stock history, dan proses inventory secara terstruktur.
           </p>
-
         </div>
-
       </section>
 
+      {/* PROJECT VISUAL */}
+      <section className="border-t border-[#111111]/10 bg-[#111111] text-white">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+          <p className="mb-10 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
+            Project Visual
+          </p>
+
+          <ProjectVisual type="inventory" />
+        </div>
+      </section>
+
+      {/* OVERVIEW */}
       <section className="border-t border-[#111111]/10 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
           <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
-
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
               01 — Overview
             </p>
@@ -66,16 +77,13 @@ export default function InventoryManagementApiPage() {
                 stok.
               </p>
             </div>
-
           </div>
-
         </div>
       </section>
 
+      {/* TECHNOLOGY */}
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
         <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
-
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
             02 — Technology
           </p>
@@ -98,20 +106,17 @@ export default function InventoryManagementApiPage() {
               </span>
             ))}
           </div>
-
         </div>
-
       </section>
 
+      {/* FEATURES */}
       <section className="border-t border-[#111111]/10 bg-[#111111] text-white">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
             03 — Features
           </p>
 
           <div className="mt-12 grid gap-0 md:grid-cols-2">
-
             {[
               "Product Management",
               "Category Management",
@@ -137,16 +142,13 @@ export default function InventoryManagementApiPage() {
                 </h3>
               </div>
             ))}
-
           </div>
-
         </div>
       </section>
 
+      {/* WHAT I LEARNED */}
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
         <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
-
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
             04 — Learning
           </p>
@@ -164,13 +166,11 @@ export default function InventoryManagementApiPage() {
               Postman.
             </p>
           </div>
-
         </div>
-
       </section>
 
+      {/* FOOTER */}
       <footer className="bg-[#FF5C35] px-6 py-8 lg:px-10">
-
         <div className="mx-auto flex max-w-7xl justify-between text-sm font-medium">
           <span>Inventory Management API</span>
 
@@ -178,7 +178,6 @@ export default function InventoryManagementApiPage() {
             Back to Projects ↗
           </Link>
         </div>
-
       </footer>
 
     </main>

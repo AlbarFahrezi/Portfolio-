@@ -1,9 +1,11 @@
 import Link from "next/link";
+import ProjectVisual from "@/app/components/ProjectVisual";
 
 export default function ApprovalWorkflowPage() {
   return (
     <main className="min-h-screen bg-[#F5F3EE] text-[#111111]">
 
+      {/* NAVBAR */}
       <nav className="sticky top-0 z-50 border-b border-[#111111]/10 bg-[#F5F3EE]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
           <Link
@@ -22,34 +24,43 @@ export default function ApprovalWorkflowPage() {
         </div>
       </nav>
 
+      {/* HERO */}
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
           Project 03 — Fullstack
         </p>
 
         <div className="mt-8 grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
-
           <h1 className="font-[var(--font-space-grotesk)] text-5xl font-bold leading-[0.9] tracking-[-0.07em] md:text-7xl lg:text-8xl">
             Approval
             <br />
-            <span className="text-[#FF5C35]">Workflow.</span>
+            <span className="text-[#FF5C35]">
+              Workflow.
+            </span>
           </h1>
 
           <p className="max-w-md text-base leading-8 text-[#6B6B6B] md:text-lg">
             Sistem workflow untuk mengelola proses pengajuan dari draft,
             submission, approval, hingga rejection.
           </p>
-
         </div>
-
       </section>
 
+      {/* PROJECT VISUAL */}
+      <section className="border-t border-[#111111]/10 bg-[#111111] text-white">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+          <p className="mb-10 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
+            Project Visual
+          </p>
+
+          <ProjectVisual type="workflow" />
+        </div>
+      </section>
+
+      {/* OVERVIEW */}
       <section className="border-t border-[#111111]/10 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
           <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
-
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
               01 — Overview
             </p>
@@ -65,16 +76,13 @@ export default function ApprovalWorkflowPage() {
                 perubahan state berdasarkan aksi user.
               </p>
             </div>
-
           </div>
-
         </div>
       </section>
 
+      {/* TECHNOLOGY */}
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
         <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
-
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
             02 — Technology
           </p>
@@ -96,20 +104,17 @@ export default function ApprovalWorkflowPage() {
               </span>
             ))}
           </div>
-
         </div>
-
       </section>
 
+      {/* WORKFLOW */}
       <section className="border-t border-[#111111]/10 bg-[#111111] text-white">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
             03 — Workflow
           </p>
 
           <div className="mt-12 grid gap-0 md:grid-cols-2">
-
             {[
               "Draft",
               "Submit",
@@ -131,16 +136,13 @@ export default function ApprovalWorkflowPage() {
                 </h3>
               </div>
             ))}
-
           </div>
-
         </div>
       </section>
 
+      {/* WHAT I LEARNED */}
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-
         <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
-
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
             04 — Learning
           </p>
@@ -157,13 +159,11 @@ export default function ApprovalWorkflowPage() {
               hanya dapat dilakukan sesuai aturan sistem.
             </p>
           </div>
-
         </div>
-
       </section>
 
+      {/* FOOTER */}
       <footer className="bg-[#FF5C35] px-6 py-8 lg:px-10">
-
         <div className="mx-auto flex max-w-7xl justify-between text-sm font-medium">
           <span>Approval Workflow System</span>
 
@@ -171,7 +171,6 @@ export default function ApprovalWorkflowPage() {
             Back to Projects ↗
           </Link>
         </div>
-
       </footer>
 
     </main>

@@ -13,9 +13,26 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Albar — Fullstack Developer",
+  title: {
+    default: "Albar — Fullstack Developer",
+    template: "%s — Albar",
+  },
   description:
-    "Personal portfolio documenting Albar's PKL journey, projects, skills, and learning experience.",
+    "Personal portfolio Albar yang mendokumentasikan perjalanan PKL, project, skill, dan pengalaman belajar dalam software development.",
+  keywords: [
+    "Albar",
+    "Fullstack Developer",
+    "Web Developer",
+    "Laravel",
+    "Next.js",
+    "PHP",
+    "React",
+    "MySQL",
+    "Portfolio",
+    "PKL",
+  ],
+  authors: [{ name: "Albar Fahrezi" }],
+  creator: "Albar Fahrezi",
 };
 
 export default function RootLayout({
@@ -25,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="id"
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <body className={inter.className}>{children}</body>

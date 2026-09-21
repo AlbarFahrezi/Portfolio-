@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 const projects = [
   {
@@ -38,66 +41,89 @@ const skills = [
   "Git",
 ];
 
+const navItems = [
+  { label: "About", href: "#about" },
+  { label: "Journey", href: "#journey" },
+  { label: "Projects", href: "#projects" },
+  { label: "Skills", href: "#skills" },
+  { label: "Contact", href: "#contact" },
+];
+
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <main className="min-h-screen overflow-hidden bg-[#F5F3EE] text-[#111111]">
-
       {/* ==================== NAVBAR ==================== */}
       <nav className="sticky top-0 z-50 border-b border-[#111111]/10 bg-[#F5F3EE]/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-
-          <Link
-            href="/"
-            className="font-[var(--font-space-grotesk)] text-lg font-bold tracking-[-0.05em]"
-          >
-            ALBAR<span className="text-[#FF5C35]">.</span>
-          </Link>
-
-          <div className="hidden items-center gap-8 md:flex">
-            <a
-              href="#about"
-              className="text-sm font-medium transition-colors hover:text-[#FF5C35]"
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="flex items-center justify-between py-5">
+            <Link
+              href="/"
+              onClick={() => setMenuOpen(false)}
+              className="font-[var(--font-space-grotesk)] text-lg font-bold tracking-[-0.05em]"
             >
-              About
-            </a>
+              ALBAR<span className="text-[#FF5C35]">.</span>
+            </Link>
 
-            <a
-              href="#journey"
-              className="text-sm font-medium transition-colors hover:text-[#FF5C35]"
-            >
-              Journey
-            </a>
+            {/* Desktop Navigation */}
+            <div className="hidden items-center gap-8 md:flex">
+              {navItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm font-medium transition-colors hover:text-[#FF5C35]"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
 
+            {/* Desktop Button */}
             <a
               href="#projects"
-              className="text-sm font-medium transition-colors hover:text-[#FF5C35]"
+              className="hidden items-center justify-center rounded-full bg-[#111111] px-5 py-2.5 text-sm font-semibold !text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#FF5C35] md:inline-flex"
             >
-              Projects
+              View Work
             </a>
 
-            <a
-              href="#skills"
-              className="text-sm font-medium transition-colors hover:text-[#FF5C35]"
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={menuOpen}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#111111]/15 text-xl md:hidden"
             >
-              Skills
-            </a>
-
-            <a
-              href="#contact"
-              className="text-sm font-medium transition-colors hover:text-[#FF5C35]"
-            >
-              Contact
-            </a>
+              {menuOpen ? "×" : "☰"}
+            </button>
           </div>
 
-          {/* VIEW WORK */}
-          <a
-            href="#projects"
-            className="inline-flex items-center justify-center rounded-full bg-[#111111] px-5 py-2.5 text-sm font-semibold !text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#FF5C35]"
-          >
-            View Work
-          </a>
+          {/* Mobile Navigation */}
+          {menuOpen && (
+            <div className="border-t border-[#111111]/10 py-5 md:hidden">
+              <div className="flex flex-col">
+                {navItems.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="border-b border-[#111111]/10 py-4 text-base font-semibold transition-colors hover:text-[#FF5C35]"
+                  >
+                    {item.label}
+                  </a>
+                ))}
 
+                <a
+                  href="#projects"
+                  onClick={() => setMenuOpen(false)}
+                  className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[#111111] px-5 py-3 text-sm font-semibold !text-white transition-colors hover:bg-[#FF5C35]"
+                >
+                  View Work
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -106,16 +132,13 @@ export default function Home() {
         id="home"
         className="mx-auto flex min-h-[calc(100vh-81px)] max-w-7xl flex-col justify-center px-6 py-20 lg:px-10"
       >
-
         <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] sm:text-sm">
           <span className="h-2 w-2 shrink-0 rounded-full bg-[#FF5C35]" />
           Personal Portfolio · PKL Journey
         </div>
 
         <div className="grid gap-14 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
-
           <div>
-
             <p className="mb-5 text-base text-[#6B6B6B] md:text-lg">
               Hello, I&apos;m
             </p>
@@ -132,11 +155,9 @@ export default function Home() {
                 who loves building things.
               </span>
             </h2>
-
           </div>
 
           <div className="lg:pb-2">
-
             <p className="max-w-md text-base leading-7 text-[#6B6B6B] md:text-lg md:leading-8">
               A personal collection of my internship journey, projects,
               experiments, and things I learned while building software.
@@ -149,21 +170,16 @@ export default function Home() {
               Explore my projects
               <span className="text-[#FF5C35]">↗</span>
             </a>
-
           </div>
-
         </div>
 
         <div className="mt-20 border-t border-[#111111]/20 pt-5">
-
           <div className="flex flex-col justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6B6B6B] sm:flex-row sm:text-xs">
             <span>Based in Indonesia</span>
             <span>2026 — PKL Portfolio</span>
             <span>Scroll to explore ↓</span>
           </div>
-
         </div>
-
       </section>
 
       {/* ==================== ABOUT ==================== */}
@@ -171,11 +187,8 @@ export default function Home() {
         id="about"
         className="border-t border-[#111111]/10 bg-[#111111] text-white"
       >
-
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-
           <div className="grid gap-12 lg:grid-cols-[0.35fr_0.65fr]">
-
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
                 01 — About
@@ -183,7 +196,6 @@ export default function Home() {
             </div>
 
             <div>
-
               <h2 className="max-w-4xl font-[var(--font-space-grotesk)] text-4xl font-bold leading-[1.05] tracking-[-0.06em] md:text-6xl">
                 Learning by{" "}
                 <span className="text-[#FF5C35]">building</span> real
@@ -195,13 +207,9 @@ export default function Home() {
                 aplikasi yang benar-benar bisa digunakan. Dari authentication,
                 database, REST API, sampai sistem inventory dan workflow.
               </p>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       {/* ==================== JOURNEY ==================== */}
@@ -209,11 +217,8 @@ export default function Home() {
         id="journey"
         className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32"
       >
-
         <div className="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
-
           <div>
-
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
               02 — Journey
             </p>
@@ -223,24 +228,17 @@ export default function Home() {
               <br />
               to building.
             </h2>
-
           </div>
 
           <p className="max-w-sm text-base leading-7 text-[#6B6B6B]">
             Perjalanan saya berkembang melalui proses belajar, eksplorasi,
             implementasi, dan evaluasi.
           </p>
-
         </div>
 
         <div className="grid border-t border-[#111111]/20 md:grid-cols-3">
-
-          {/* PKL */}
           <div className="border-b border-[#111111]/20 py-8 md:border-b-0 md:border-r md:pr-8">
-
-            <span className="text-sm font-semibold text-[#FF5C35]">
-              01
-            </span>
+            <span className="text-sm font-semibold text-[#FF5C35]">01</span>
 
             <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
               PKL
@@ -250,15 +248,10 @@ export default function Home() {
               Mengenal workflow pengembangan software dan memahami bagaimana
               sebuah project dibangun secara terstruktur.
             </p>
-
           </div>
 
-          {/* LEARNING */}
           <div className="border-b border-[#111111]/20 py-8 md:border-b-0 md:border-r md:px-8">
-
-            <span className="text-sm font-semibold text-[#FF5C35]">
-              02
-            </span>
+            <span className="text-sm font-semibold text-[#FF5C35]">02</span>
 
             <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
               Learning
@@ -268,15 +261,10 @@ export default function Home() {
               Memperdalam Laravel, database, authentication, API, Git,
               frontend, dan konsep software development.
             </p>
-
           </div>
 
-          {/* BUILDING */}
           <div className="py-8 md:pl-8">
-
-            <span className="text-sm font-semibold text-[#FF5C35]">
-              03
-            </span>
+            <span className="text-sm font-semibold text-[#FF5C35]">03</span>
 
             <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
               Building
@@ -286,11 +274,8 @@ export default function Home() {
               Menerapkan ilmu melalui beberapa project seperti Authentication
               API, Inventory API, dan Approval Workflow.
             </p>
-
           </div>
-
         </div>
-
       </section>
 
       {/* ==================== PROJECTS ==================== */}
@@ -298,13 +283,9 @@ export default function Home() {
         id="projects"
         className="border-t border-[#111111]/10 bg-white"
       >
-
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-
           <div className="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
-
             <div>
-
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
                 03 — Selected Projects
               </p>
@@ -314,55 +295,43 @@ export default function Home() {
                 <br />
                 <span className="text-[#6B6B6B]">built.</span>
               </h2>
-
             </div>
 
             <p className="max-w-sm text-base leading-7 text-[#6B6B6B]">
               Beberapa project yang menjadi bagian dari perjalanan belajar dan
               pengalaman saya selama PKL.
             </p>
-
           </div>
 
           <div className="grid gap-0">
-
             {projects.map((project) => (
-
               <Link
                 key={project.number}
                 href={project.slug}
                 className="group grid gap-8 border-t border-[#111111]/20 py-10 transition-colors hover:bg-[#F5F3EE] md:grid-cols-[80px_1fr_1fr] md:px-5"
               >
-
                 <span className="text-sm font-semibold text-[#FF5C35]">
                   {project.number}
                 </span>
 
                 <div>
-
                   <h3 className="font-[var(--font-space-grotesk)] text-3xl font-bold tracking-[-0.05em] transition-colors duration-200 group-hover:text-[#FF5C35] md:text-4xl">
                     {project.title}
                   </h3>
 
                   <div className="mt-6 flex flex-wrap gap-2">
-
                     {project.tags.map((tag) => (
-
                       <span
                         key={tag}
                         className="rounded-full border border-[#111111]/15 px-3 py-1 text-xs font-medium"
                       >
                         {tag}
                       </span>
-
                     ))}
-
                   </div>
-
                 </div>
 
                 <div className="flex flex-col justify-between gap-6">
-
                   <p className="max-w-md leading-7 text-[#6B6B6B]">
                     {project.description}
                   </p>
@@ -370,17 +339,11 @@ export default function Home() {
                   <span className="text-sm font-semibold opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100">
                     View project ↗
                   </span>
-
                 </div>
-
               </Link>
-
             ))}
-
           </div>
-
         </div>
-
       </section>
 
       {/* ==================== SKILLS ==================== */}
@@ -388,11 +351,8 @@ export default function Home() {
         id="skills"
         className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32"
       >
-
         <div className="grid gap-12 lg:grid-cols-[0.35fr_0.65fr]">
-
           <div>
-
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
               04 — Skills
             </p>
@@ -400,26 +360,19 @@ export default function Home() {
             <h2 className="mt-4 font-[var(--font-space-grotesk)] text-4xl font-bold tracking-[-0.06em] md:text-5xl">
               Tools I use.
             </h2>
-
           </div>
 
           <div className="flex content-start flex-wrap gap-3">
-
             {skills.map((skill) => (
-
               <span
                 key={skill}
                 className="border border-[#111111]/20 px-5 py-3 text-base font-medium transition-all duration-200 hover:border-[#FF5C35] hover:bg-[#FF5C35] hover:text-white md:text-lg"
               >
                 {skill}
               </span>
-
             ))}
-
           </div>
-
         </div>
-
       </section>
 
       {/* ==================== CONTACT ==================== */}
@@ -427,15 +380,12 @@ export default function Home() {
         id="contact"
         className="border-t border-[#111111]/10 bg-[#FF5C35] text-[#111111]"
       >
-
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
-
           <p className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">
             05 — Contact
           </p>
 
           <div className="mt-10 flex flex-col justify-between gap-12 lg:flex-row lg:items-end">
-
             <h2 className="max-w-4xl font-[var(--font-space-grotesk)] text-5xl font-bold leading-[0.9] tracking-[-0.07em] md:text-7xl">
               Let&apos;s connect
               <br />
@@ -443,9 +393,8 @@ export default function Home() {
             </h2>
 
             <div className="flex min-w-[240px] flex-col gap-4 text-lg font-medium">
-
               <a
-                href="mailto:your.email@example.com"
+                href="mailto:albarfahrezi7@gmail.com"
                 className="border-b border-[#111111] pb-2 transition-opacity hover:opacity-60"
               >
                 albarfahrezi7@gmail.com
@@ -462,36 +411,25 @@ export default function Home() {
 
               <a
                 href="https://www.linkedin.com/in/albar-fahrezi-65b30a395/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="border-b border-[#111111] pb-2 transition-opacity hover:opacity-60"
               >
                 LinkedIn ↗
               </a>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       {/* ==================== FOOTER ==================== */}
       <footer className="bg-[#111111] px-6 py-8 text-white lg:px-10">
-
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-white/50 sm:flex-row">
+          <span>© 2026 Albar. All rights reserved.</span>
 
-          <span>
-            © 2026 Albar. All rights reserved.
-          </span>
-
-          <span>
-            Built with Next.js & Tailwind CSS
-          </span>
-
+          <span>Built with Next.js &amp; Tailwind CSS</span>
         </div>
-
       </footer>
-
     </main>
   );
 }
