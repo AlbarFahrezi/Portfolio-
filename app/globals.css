@@ -3,6 +3,7 @@
 :root {
   --background: #f5f3ee;
   --foreground: #111111;
+  --accent: #ff5c35;
 }
 
 @theme inline {
@@ -42,7 +43,13 @@ a {
   text-decoration: none;
 }
 
-/* ==================== ANIMATIONS ==================== */
+img {
+  max-width: 100%;
+}
+
+/* =========================================================
+   GENERAL ANIMATIONS
+========================================================= */
 
 @keyframes fadeUp {
   from {
@@ -82,7 +89,72 @@ a {
   animation: fadeIn 1s ease-out both;
 }
 
-/* ==================== ACCESSIBILITY ==================== */
+/* =========================================================
+   DECORATIVE LINE
+========================================================= */
+
+@keyframes lineMove {
+  0% {
+    transform: scaleY(0.2);
+    transform-origin: top;
+  }
+
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+
+  51% {
+    transform-origin: bottom;
+  }
+
+  100% {
+    transform: scaleY(0.2);
+    transform-origin: bottom;
+  }
+}
+
+.animate-line-move {
+  animation: lineMove 2.5s ease-in-out infinite;
+}
+
+/* =========================================================
+   PROJECT HOVER
+========================================================= */
+
+.project-row {
+  transition:
+    background-color 300ms ease,
+    transform 300ms ease;
+}
+
+.project-row:hover {
+  transform: translateX(4px);
+}
+
+/* =========================================================
+   SKILL HOVER
+========================================================= */
+
+.skill-tag {
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+.mobile-menu {
+  animation: fadeIn 220ms ease-out both;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   html {
