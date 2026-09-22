@@ -93,7 +93,7 @@ export default function Home() {
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle navigation menu"
               aria-expanded={menuOpen}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#111111]/15 text-xl md:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#111111]/15 text-xl transition-all duration-200 hover:border-[#FF5C35] hover:text-[#FF5C35] md:hidden"
             >
               {menuOpen ? "×" : "☰"}
             </button>
@@ -101,7 +101,7 @@ export default function Home() {
 
           {/* Mobile Navigation */}
           {menuOpen && (
-            <div className="border-t border-[#111111]/10 py-5 md:hidden">
+            <div className="animate-fade-in border-t border-[#111111]/10 py-5 md:hidden">
               <div className="flex flex-col">
                 {navItems.map((item) => (
                   <a
@@ -117,7 +117,7 @@ export default function Home() {
                 <a
                   href="#projects"
                   onClick={() => setMenuOpen(false)}
-                  className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[#111111] px-5 py-3 text-sm font-semibold !text-white transition-colors hover:bg-[#FF5C35]"
+                  className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[#111111] px-5 py-3 text-sm font-semibold !text-white transition-all duration-200 hover:bg-[#FF5C35]"
                 >
                   View Work
                 </a>
@@ -132,13 +132,13 @@ export default function Home() {
         id="home"
         className="mx-auto flex min-h-[calc(100vh-81px)] max-w-7xl flex-col justify-center px-6 py-20 lg:px-10"
       >
-        <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] sm:text-sm">
+        <div className="animate-fade-in mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] sm:text-sm">
           <span className="h-2 w-2 shrink-0 rounded-full bg-[#FF5C35]" />
           Personal Portfolio · PKL Journey
         </div>
 
         <div className="grid gap-14 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
-          <div>
+          <div className="animate-fade-up">
             <p className="mb-5 text-base text-[#6B6B6B] md:text-lg">
               Hello, I&apos;m
             </p>
@@ -157,7 +157,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="lg:pb-2">
+          <div className="animate-fade-up-delay lg:pb-2">
             <p className="max-w-md text-base leading-7 text-[#6B6B6B] md:text-lg md:leading-8">
               A personal collection of my internship journey, projects,
               experiments, and things I learned while building software.
@@ -173,7 +173,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-20 border-t border-[#111111]/20 pt-5">
+        <div className="animate-fade-up-delay-2 mt-20 border-t border-[#111111]/20 pt-5">
           <div className="flex flex-col justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6B6B6B] sm:flex-row sm:text-xs">
             <span>Based in Indonesia</span>
             <span>2026 — PKL Portfolio</span>
@@ -308,9 +308,9 @@ export default function Home() {
               <Link
                 key={project.number}
                 href={project.slug}
-                className="group grid gap-8 border-t border-[#111111]/20 py-10 transition-colors hover:bg-[#F5F3EE] md:grid-cols-[80px_1fr_1fr] md:px-5"
+                className="group grid gap-8 border-t border-[#111111]/20 py-10 transition-all duration-300 hover:bg-[#F5F3EE] md:grid-cols-[80px_1fr_1fr] md:px-5"
               >
-                <span className="text-sm font-semibold text-[#FF5C35]">
+                <span className="text-sm font-semibold text-[#FF5C35] transition-transform duration-300 group-hover:translate-x-1">
                   {project.number}
                 </span>
 
@@ -323,7 +323,7 @@ export default function Home() {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-[#111111]/15 px-3 py-1 text-xs font-medium"
+                        className="rounded-full border border-[#111111]/15 px-3 py-1 text-xs font-medium transition-all duration-200 group-hover:border-[#111111]/25"
                       >
                         {tag}
                       </span>
@@ -336,7 +336,7 @@ export default function Home() {
                     {project.description}
                   </p>
 
-                  <span className="text-sm font-semibold opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100">
+                  <span className="text-sm font-semibold opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
                     View project ↗
                   </span>
                 </div>
@@ -366,7 +366,7 @@ export default function Home() {
             {skills.map((skill) => (
               <span
                 key={skill}
-                className="border border-[#111111]/20 px-5 py-3 text-base font-medium transition-all duration-200 hover:border-[#FF5C35] hover:bg-[#FF5C35] hover:text-white md:text-lg"
+                className="border border-[#111111]/20 px-5 py-3 text-base font-medium transition-all duration-200 hover:-translate-y-0.5 hover:border-[#FF5C35] hover:bg-[#FF5C35] hover:text-white md:text-lg"
               >
                 {skill}
               </span>
