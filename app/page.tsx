@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
@@ -62,19 +63,99 @@ const navItems = [
 ];
 
 /* =========================================================
+   SCROLL REVEAL COMPONENT
+========================================================= */
+
+type RevealProps = {
+  children: React.ReactNode;
+  className?: string;
+  variant?: "up" | "left" | "right" | "scale";
+  delay?: number;
+};
+
+function Reveal({
+  children,
+  className = "",
+  variant = "up",
+  delay = 0,
+}: RevealProps) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+
+    if (!element) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reduceMotion) {
+      setVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(element);
+        }
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -60px 0px",
+      },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const variantClass = {
+    up: "reveal",
+    left: "reveal-left",
+    right: "reveal-right",
+    scale: "reveal-scale",
+  }[variant];
+
+  const style = {
+    "--reveal-delay": `${delay}ms`,
+  } as CSSProperties;
+
+  return (
+    <div
+      ref={ref}
+      style={style}
+      className={`${variantClass} ${
+        visible ? "is-visible" : ""
+      } ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* =========================================================
    HANGING NAME TAG / LANYARD
 ========================================================= */
 
 function HangingNameTag() {
   const [motion, setMotion] = useState({
     x: 0,
-    y: 0,
+    y: -170,
     rotate: 0,
   });
 
   const motionRef = useRef({
     x: 0,
-    y: 0,
+    y: -170,
     rotate: 0,
     vx: 0,
     vy: 0,
@@ -157,7 +238,8 @@ function HangingNameTag() {
         Math.abs(current.vr) > 0.08;
 
       if (stillMoving) {
-        animationRef.current = requestAnimationFrame(animate);
+        animationRef.current =
+          requestAnimationFrame(animate);
       } else {
         current.x = 0;
         current.y = 0;
@@ -173,6 +255,24 @@ function HangingNameTag() {
 
     animationRef.current = requestAnimationFrame(animate);
   };
+
+  /* =======================================================
+     INITIAL DROP ANIMATION
+  ======================================================= */
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      startSpring();
+    }, 180);
+
+    return () => {
+      window.clearTimeout(timer);
+
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
 
   /* =======================================================
      POINTER DOWN
@@ -206,7 +306,9 @@ function HangingNameTag() {
     current.lastY = event.clientY;
     current.lastTime = performance.now();
 
-    event.currentTarget.setPointerCapture(event.pointerId);
+    event.currentTarget.setPointerCapture(
+      event.pointerId,
+    );
   };
 
   /* =======================================================
@@ -218,7 +320,10 @@ function HangingNameTag() {
   ) => {
     const drag = dragRef.current;
 
-    if (!drag.active || drag.pointerId !== event.pointerId) {
+    if (
+      !drag.active ||
+      drag.pointerId !== event.pointerId
+    ) {
       return;
     }
 
@@ -244,10 +349,14 @@ function HangingNameTag() {
     );
 
     const pointerVelocityX =
-      ((event.clientX - current.lastX) / deltaTime) * 16;
+      ((event.clientX - current.lastX) /
+        deltaTime) *
+      16;
 
     const pointerVelocityY =
-      ((event.clientY - current.lastY) / deltaTime) * 16;
+      ((event.clientY - current.lastY) /
+        deltaTime) *
+      16;
 
     current.vx =
       current.vx * 0.35 +
@@ -286,7 +395,10 @@ function HangingNameTag() {
   ) => {
     const drag = dragRef.current;
 
-    if (!drag.active || drag.pointerId !== event.pointerId) {
+    if (
+      !drag.active ||
+      drag.pointerId !== event.pointerId
+    ) {
       return;
     }
 
@@ -304,25 +416,9 @@ function HangingNameTag() {
     startSpring();
   };
 
-  useEffect(() => {
-    return () => {
-      if (animationRef.current !== null) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, []);
-
   /* =======================================================
      LANYARD GEOMETRY
   ======================================================= */
-
-  /*
-    Area lanyard:
-    - anchor berada di bagian paling atas
-    - strap turun dari anchor
-    - clip menggantung
-    - card berada di bawah clip
-  */
 
   const anchorX = 210;
   const anchorY = 0;
@@ -401,10 +497,6 @@ function HangingNameTag() {
         lg:block
       "
     >
-      {/* ==================================================
-          CEILING ANCHOR
-      ================================================== */}
-
       <div
         className="
           absolute
@@ -432,10 +524,6 @@ function HangingNameTag() {
         />
       </div>
 
-      {/* ==================================================
-          BLACK LANYARD
-      ================================================== */}
-
       <svg
         className="
           pointer-events-none
@@ -449,7 +537,6 @@ function HangingNameTag() {
         viewBox="0 0 420 620"
         preserveAspectRatio="none"
       >
-        {/* shadow */}
         <path
           d={ropePath}
           fill="none"
@@ -458,7 +545,6 @@ function HangingNameTag() {
           strokeLinecap="round"
         />
 
-        {/* main strap */}
         <path
           d={ropePath}
           fill="none"
@@ -467,7 +553,6 @@ function HangingNameTag() {
           strokeLinecap="round"
         />
 
-        {/* fabric highlight */}
         <path
           d={ropeHighlightPath}
           fill="none"
@@ -476,10 +561,6 @@ function HangingNameTag() {
           strokeLinecap="round"
         />
       </svg>
-
-      {/* ==================================================
-          DRAGGABLE CARD
-      ================================================== */}
 
       <div
         onPointerDown={handlePointerDown}
@@ -510,10 +591,6 @@ function HangingNameTag() {
           active:cursor-grabbing
         "
       >
-        {/* ==================================================
-            METAL RING
-        ================================================== */}
-
         <div
           className="
             pointer-events-none
@@ -546,10 +623,6 @@ function HangingNameTag() {
           />
         </div>
 
-        {/* ==================================================
-            METAL CLIP
-        ================================================== */}
-
         <div
           className="
             pointer-events-none
@@ -571,10 +644,6 @@ function HangingNameTag() {
           "
         />
 
-        {/* ==================================================
-            PHOTO CARD
-        ================================================== */}
-
         <div
           className="
             mt-7
@@ -586,8 +655,6 @@ function HangingNameTag() {
             shadow-[0_28px_70px_rgba(0,0,0,0.17)]
           "
         >
-          {/* card header */}
-
           <div
             className="
               flex
@@ -620,8 +687,6 @@ function HangingNameTag() {
             </span>
           </div>
 
-          {/* photo */}
-
           <div className="p-4">
             <div
               className="
@@ -642,8 +707,8 @@ function HangingNameTag() {
                 className="
                   pointer-events-none
                   object-cover
-                  object-[45%_50%]"
-                
+                  object-[45%_50%]
+                "
               />
 
               <div
@@ -704,8 +769,6 @@ function HangingNameTag() {
         </div>
       </div>
 
-      {/* decorative vertical line */}
-
       <div
         className="
           absolute
@@ -765,8 +828,6 @@ export default function Home() {
               ALBAR<span className="text-[#FF5C35]">.</span>
             </Link>
 
-            {/* desktop nav */}
-
             <div className="hidden items-center gap-8 md:flex">
               {navItems.map((item) => (
                 <a
@@ -783,8 +844,6 @@ export default function Home() {
                 </a>
               ))}
             </div>
-
-            {/* language switch */}
 
             <div className="hidden items-center gap-2 md:flex">
               <div
@@ -842,8 +901,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* view work */}
-
             <a
               href="#projects"
               className="
@@ -866,8 +923,6 @@ export default function Home() {
             >
               {isID ? "Lihat Project" : "View Work"}
             </a>
-
-            {/* mobile menu */}
 
             <button
               type="button"
@@ -894,8 +949,6 @@ export default function Home() {
               {menuOpen ? "×" : "☰"}
             </button>
           </div>
-
-          {/* mobile navigation */}
 
           {menuOpen && (
             <div
@@ -1055,8 +1108,6 @@ export default function Home() {
             lg:items-start
           "
         >
-          {/* hero left */}
-
           <div className="animate-fade-up">
             <p className="mb-5 text-base text-[#6B6B6B] md:text-lg">
               {isID ? "Halo, saya" : "Hello, I'm"}
@@ -1101,8 +1152,6 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* hero right */}
-
           <div
             className="
               animate-fade-up-delay
@@ -1112,8 +1161,6 @@ export default function Home() {
               lg:pt-8
             "
           >
-            {/* ruang untuk lanyard */}
-
             <div className="h-[600px] w-full" />
 
             <div className="mt-8 w-full max-w-md">
@@ -1149,7 +1196,9 @@ export default function Home() {
                   md:text-base
                 "
               >
-                {isID ? "Lihat project saya" : "Explore my projects"}
+                {isID
+                  ? "Lihat project saya"
+                  : "Explore my projects"}
 
                 <span className="text-[#FF5C35]">↗</span>
               </a>
@@ -1157,11 +1206,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* lanyard */}
-
         <HangingNameTag />
-
-        {/* hero bottom */}
 
         <div className="animate-fade-up-delay-2 mt-20 border-t border-[#111111]/20 pt-5">
           <div
@@ -1180,13 +1225,17 @@ export default function Home() {
             "
           >
             <span>
-              {isID ? "Berbasis di Indonesia" : "Based in Indonesia"}
+              {isID
+                ? "Berbasis di Indonesia"
+                : "Based in Indonesia"}
             </span>
 
             <span>2026 — PKL Portfolio</span>
 
             <span>
-              {isID ? "Scroll untuk melihat ↓" : "Scroll to explore ↓"}
+              {isID
+                ? "Scroll untuk melihat ↓"
+                : "Scroll to explore ↓"}
             </span>
           </div>
         </div>
@@ -1216,67 +1265,71 @@ export default function Home() {
           "
         >
           <div className="grid gap-12 lg:grid-cols-[0.35fr_0.65fr]">
-            <div>
-              <p
-                className="
-                  text-xs
-                  font-semibold
-                  uppercase
-                  tracking-[0.2em]
-                  text-[#FF5C35]
-                  md:text-sm
-                "
-              >
-                01 — {isID ? "Tentang" : "About"}
-              </p>
-            </div>
+            <Reveal variant="left">
+              <div>
+                <p
+                  className="
+                    text-xs
+                    font-semibold
+                    uppercase
+                    tracking-[0.2em]
+                    text-[#FF5C35]
+                    md:text-sm
+                  "
+                >
+                  01 — {isID ? "Tentang" : "About"}
+                </p>
+              </div>
+            </Reveal>
 
-            <div>
-              <h2
-                className="
-                  max-w-4xl
-                  font-[var(--font-space-grotesk)]
-                  text-4xl
-                  font-bold
-                  leading-[1.05]
-                  tracking-[-0.06em]
-                  md:text-6xl
-                "
-              >
-                {isID ? (
-                  <>
-                    Belajar melalui{" "}
-                    <span className="text-[#FF5C35]">
-                      membangun
-                    </span>{" "}
-                    project nyata.
-                  </>
-                ) : (
-                  <>
-                    Learning by{" "}
-                    <span className="text-[#FF5C35]">
-                      building
-                    </span>{" "}
-                    real projects.
-                  </>
-                )}
-              </h2>
+            <Reveal variant="right" delay={120}>
+              <div>
+                <h2
+                  className="
+                    max-w-4xl
+                    font-[var(--font-space-grotesk)]
+                    text-4xl
+                    font-bold
+                    leading-[1.05]
+                    tracking-[-0.06em]
+                    md:text-6xl
+                  "
+                >
+                  {isID ? (
+                    <>
+                      Belajar melalui{" "}
+                      <span className="text-[#FF5C35]">
+                        membangun
+                      </span>{" "}
+                      project nyata.
+                    </>
+                  ) : (
+                    <>
+                      Learning by{" "}
+                      <span className="text-[#FF5C35]">
+                        building
+                      </span>{" "}
+                      real projects.
+                    </>
+                  )}
+                </h2>
 
-              <p
-                className="
-                  mt-8
-                  max-w-2xl
-                  text-base
-                  leading-8
-                  text-white/60
-                  md:text-lg
-                "
-              >
-                {isID
-                  ? "Selama kegiatan PKL, saya belajar mengubah konsep menjadi aplikasi yang benar-benar bisa digunakan. Dari authentication, database, REST API, sampai sistem inventory dan workflow."
-                  : "During my internship, I learned how to turn concepts into applications that can actually be used. From authentication and databases to REST APIs, inventory systems, and workflows."}
-              </p>
-            </div>
+                <p
+                  className="
+                    mt-8
+                    max-w-2xl
+                    text-base
+                    leading-8
+                    text-white/60
+                    md:text-lg
+                  "
+                >
+                  {isID
+                    ? "Selama kegiatan PKL, saya belajar mengubah konsep menjadi aplikasi yang benar-benar bisa digunakan. Dari authentication, database, REST API, sampai sistem inventory dan workflow."
+                    : "During my internship, I learned how to turn concepts into applications that can actually be used. From authentication and databases to REST APIs, inventory systems, and workflows."}
+                </p>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -1296,152 +1349,7 @@ export default function Home() {
           lg:py-32
         "
       >
-        <div
-          className="
-            mb-16
-            flex
-            flex-col
-            justify-between
-            gap-8
-            md:flex-row
-            md:items-end
-          "
-        >
-          <div>
-            <p
-              className="
-                mb-4
-                text-xs
-                font-semibold
-                uppercase
-                tracking-[0.2em]
-                text-[#FF5C35]
-                md:text-sm
-              "
-            >
-              02 — {isID ? "Perjalanan" : "Journey"}
-            </p>
-
-            <h2
-              className="
-                font-[var(--font-space-grotesk)]
-                text-4xl
-                font-bold
-                leading-[0.95]
-                tracking-[-0.06em]
-                md:text-6xl
-              "
-            >
-              {isID ? (
-                <>
-                  Dari belajar
-                  <br />
-                  hingga membangun.
-                </>
-              ) : (
-                <>
-                  From learning
-                  <br />
-                  to building.
-                </>
-              )}
-            </h2>
-          </div>
-
-          <p className="max-w-sm text-base leading-7 text-[#6B6B6B]">
-            {isID
-              ? "Perjalanan saya berkembang melalui proses belajar, eksplorasi, implementasi, dan evaluasi."
-              : "My journey has grown through learning, exploration, implementation, and evaluation."}
-          </p>
-        </div>
-
-        <div className="grid border-t border-[#111111]/20 md:grid-cols-3">
-          <div
-            className="
-              border-b
-              border-[#111111]/20
-              py-8
-              md:border-b-0
-              md:border-r
-              md:pr-8
-            "
-          >
-            <span className="text-sm font-semibold text-[#FF5C35]">
-              01
-            </span>
-
-            <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
-              PKL
-            </h3>
-
-            <p className="mt-4 leading-7 text-[#6B6B6B]">
-              {isID
-                ? "Mengenal workflow pengembangan software dan memahami bagaimana sebuah project dibangun secara terstruktur."
-                : "Understanding software development workflows and how projects are structured and built."}
-            </p>
-          </div>
-
-          <div
-            className="
-              border-b
-              border-[#111111]/20
-              py-8
-              md:border-b-0
-              md:border-r
-              md:px-8
-            "
-          >
-            <span className="text-sm font-semibold text-[#FF5C35]">
-              02
-            </span>
-
-            <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
-              Learning
-            </h3>
-
-            <p className="mt-4 leading-7 text-[#6B6B6B]">
-              {isID
-                ? "Memperdalam Laravel, database, authentication, API, Git, frontend, dan konsep software development."
-                : "Deepening my knowledge of Laravel, databases, authentication, APIs, Git, frontend, and software development."}
-            </p>
-          </div>
-
-          <div className="py-8 md:pl-8">
-            <span className="text-sm font-semibold text-[#FF5C35]">
-              03
-            </span>
-
-            <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
-              Building
-            </h3>
-
-            <p className="mt-4 leading-7 text-[#6B6B6B]">
-              {isID
-                ? "Menerapkan ilmu melalui beberapa project seperti Authentication API, Inventory API, dan Approval Workflow."
-                : "Applying what I learned through projects such as Authentication API, Inventory API, and Approval Workflow."}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ==================================================
-          PROJECTS
-      ================================================== */}
-
-      <section
-        id="projects"
-        className="border-t border-[#111111]/10 bg-white"
-      >
-        <div
-          className="
-            mx-auto
-            max-w-7xl
-            px-6
-            py-24
-            lg:px-10
-            lg:py-32
-          "
-        >
+        <Reveal>
           <div
             className="
               mb-16
@@ -1465,7 +1373,7 @@ export default function Home() {
                   md:text-sm
                 "
               >
-                03 — {isID ? "Project Pilihan" : "Selected Projects"}
+                02 — {isID ? "Perjalanan" : "Journey"}
               </p>
 
               <h2
@@ -1480,19 +1388,15 @@ export default function Home() {
               >
                 {isID ? (
                   <>
-                    Hal yang
+                    Dari belajar
                     <br />
-                    <span className="text-[#6B6B6B]">
-                      saya bangun.
-                    </span>
+                    hingga membangun.
                   </>
                 ) : (
                   <>
-                    Things I&apos;ve
+                    From learning
                     <br />
-                    <span className="text-[#6B6B6B]">
-                      built.
-                    </span>
+                    to building.
                   </>
                 )}
               </h2>
@@ -1500,104 +1404,271 @@ export default function Home() {
 
             <p className="max-w-sm text-base leading-7 text-[#6B6B6B]">
               {isID
-                ? "Beberapa project yang menjadi bagian dari perjalanan belajar dan pengalaman saya selama PKL."
-                : "Projects that became part of my learning journey and internship experience."}
+                ? "Perjalanan saya berkembang melalui proses belajar, eksplorasi, implementasi, dan evaluasi."
+                : "My journey has grown through learning, exploration, implementation, and evaluation."}
             </p>
           </div>
+        </Reveal>
 
-          <div className="grid gap-0">
-            {projects.map((project) => (
-              <Link
-                key={project.number}
-                href={project.slug}
-                className="
-                  group
-                  grid
-                  gap-8
-                  border-t
-                  border-[#111111]/20
-                  py-10
-                  transition-all
-                  duration-300
-                  hover:bg-[#F5F3EE]
-                  md:grid-cols-[80px_1fr_1fr]
-                  md:px-5
-                "
-              >
-                <span
+        <div className="grid border-t border-[#111111]/20 md:grid-cols-3">
+          <Reveal delay={0}>
+            <div
+              className="
+                border-b
+                border-[#111111]/20
+                py-8
+                md:border-b-0
+                md:border-r
+                md:pr-8
+              "
+            >
+              <span className="text-sm font-semibold text-[#FF5C35]">
+                01
+              </span>
+
+              <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
+                PKL
+              </h3>
+
+              <p className="mt-4 leading-7 text-[#6B6B6B]">
+                {isID
+                  ? "Mengenal workflow pengembangan software dan memahami bagaimana sebuah project dibangun secara terstruktur."
+                  : "Understanding software development workflows and how projects are structured and built."}
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <div
+              className="
+                border-b
+                border-[#111111]/20
+                py-8
+                md:border-b-0
+                md:border-r
+                md:px-8
+              "
+            >
+              <span className="text-sm font-semibold text-[#FF5C35]">
+                02
+              </span>
+
+              <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
+                Learning
+              </h3>
+
+              <p className="mt-4 leading-7 text-[#6B6B6B]">
+                {isID
+                  ? "Memperdalam Laravel, database, authentication, API, Git, frontend, dan konsep software development."
+                  : "Deepening my knowledge of Laravel, databases, authentication, APIs, Git, frontend, and software development."}
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={240}>
+            <div className="py-8 md:pl-8">
+              <span className="text-sm font-semibold text-[#FF5C35]">
+                03
+              </span>
+
+              <h3 className="mt-8 font-[var(--font-space-grotesk)] text-2xl font-bold">
+                Building
+              </h3>
+
+              <p className="mt-4 leading-7 text-[#6B6B6B]">
+                {isID
+                  ? "Menerapkan ilmu melalui beberapa project seperti Authentication API, Inventory API, dan Approval Workflow."
+                  : "Applying what I learned through projects such as Authentication API, Inventory API, and Approval Workflow."}
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ==================================================
+          PROJECTS
+      ================================================== */}
+
+      <section
+        id="projects"
+        className="border-t border-[#111111]/10 bg-white"
+      >
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-6
+            py-24
+            lg:px-10
+            lg:py-32
+          "
+        >
+          <Reveal>
+            <div
+              className="
+                mb-16
+                flex
+                flex-col
+                justify-between
+                gap-8
+                md:flex-row
+                md:items-end
+              "
+            >
+              <div>
+                <p
                   className="
-                    text-sm
+                    mb-4
+                    text-xs
                     font-semibold
+                    uppercase
+                    tracking-[0.2em]
                     text-[#FF5C35]
-                    transition-transform
-                    duration-300
-                    group-hover:translate-x-1
+                    md:text-sm
                   "
                 >
-                  {project.number}
-                </span>
+                  03 —{" "}
+                  {isID ? "Project Pilihan" : "Selected Projects"}
+                </p>
 
-                <div>
-                  <h3
-                    className="
-                      font-[var(--font-space-grotesk)]
-                      text-3xl
-                      font-bold
-                      tracking-[-0.05em]
-                      transition-colors
-                      duration-200
-                      group-hover:text-[#FF5C35]
-                      md:text-4xl
-                    "
-                  >
-                    {project.title}
-                  </h3>
-
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="
-                          rounded-full
-                          border
-                          border-[#111111]/15
-                          px-3
-                          py-1
-                          text-xs
-                          font-medium
-                          transition-all
-                          duration-200
-                          group-hover:border-[#111111]/25
-                        "
-                      >
-                        {tag}
+                <h2
+                  className="
+                    font-[var(--font-space-grotesk)]
+                    text-4xl
+                    font-bold
+                    leading-[0.95]
+                    tracking-[-0.06em]
+                    md:text-6xl
+                  "
+                >
+                  {isID ? (
+                    <>
+                      Hal yang
+                      <br />
+                      <span className="text-[#6B6B6B]">
+                        saya bangun.
                       </span>
-                    ))}
-                  </div>
-                </div>
+                    </>
+                  ) : (
+                    <>
+                      Things I&apos;ve
+                      <br />
+                      <span className="text-[#6B6B6B]">
+                        built.
+                      </span>
+                    </>
+                  )}
+                </h2>
+              </div>
 
-                <div className="flex flex-col justify-between gap-6">
-                  <p className="max-w-md leading-7 text-[#6B6B6B]">
-                    {isID
-                      ? project.description.id
-                      : project.description.en}
-                  </p>
+              <p className="max-w-sm text-base leading-7 text-[#6B6B6B]">
+                {isID
+                  ? "Beberapa project yang menjadi bagian dari perjalanan belajar dan pengalaman saya selama PKL."
+                  : "Projects that became part of my learning journey and internship experience."}
+              </p>
+            </div>
+          </Reveal>
 
+          <div className="grid gap-0">
+            {projects.map((project, index) => (
+              <Reveal
+                key={project.number}
+                delay={index * 120}
+                variant="up"
+              >
+                <Link
+                  href={project.slug}
+                  className="
+                    group
+                    grid
+                    gap-8
+                    border-t
+                    border-[#111111]/20
+                    py-10
+                    transition-all
+                    duration-300
+                    hover:bg-[#F5F3EE]
+                    md:grid-cols-[80px_1fr_1fr]
+                    md:px-5
+                  "
+                >
                   <span
                     className="
                       text-sm
                       font-semibold
-                      opacity-0
-                      transition-all
+                      text-[#FF5C35]
+                      transition-transform
                       duration-300
                       group-hover:translate-x-1
-                      group-hover:opacity-100
                     "
                   >
-                    {isID ? "Lihat project ↗" : "View project ↗"}
+                    {project.number}
                   </span>
-                </div>
-              </Link>
+
+                  <div>
+                    <h3
+                      className="
+                        font-[var(--font-space-grotesk)]
+                        text-3xl
+                        font-bold
+                        tracking-[-0.05em]
+                        transition-colors
+                        duration-200
+                        group-hover:text-[#FF5C35]
+                        md:text-4xl
+                      "
+                    >
+                      {project.title}
+                    </h3>
+
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="
+                            rounded-full
+                            border
+                            border-[#111111]/15
+                            px-3
+                            py-1
+                            text-xs
+                            font-medium
+                            transition-all
+                            duration-200
+                            group-hover:border-[#111111]/25
+                          "
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col justify-between gap-6">
+                    <p className="max-w-md leading-7 text-[#6B6B6B]">
+                      {isID
+                        ? project.description.id
+                        : project.description.en}
+                    </p>
+
+                    <span
+                      className="
+                        text-sm
+                        font-semibold
+                        opacity-0
+                        transition-all
+                        duration-300
+                        group-hover:translate-x-1
+                        group-hover:opacity-100
+                      "
+                    >
+                      {isID
+                        ? "Lihat project ↗"
+                        : "View project ↗"}
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -1619,58 +1690,67 @@ export default function Home() {
         "
       >
         <div className="grid gap-12 lg:grid-cols-[0.35fr_0.65fr]">
-          <div>
-            <p
-              className="
-                text-xs
-                font-semibold
-                uppercase
-                tracking-[0.2em]
-                text-[#FF5C35]
-                md:text-sm
-              "
-            >
-              04 — {isID ? "Skill" : "Skills"}
-            </p>
-
-            <h2
-              className="
-                mt-4
-                font-[var(--font-space-grotesk)]
-                text-4xl
-                font-bold
-                tracking-[-0.06em]
-                md:text-5xl
-              "
-            >
-              {isID ? "Tools yang saya gunakan." : "Tools I use."}
-            </h2>
-          </div>
-
-          <div className="flex content-start flex-wrap gap-3">
-            {skills.map((skill) => (
-              <span
-                key={skill}
+          <Reveal variant="left">
+            <div>
+              <p
                 className="
-                  border
-                  border-[#111111]/20
-                  px-5
-                  py-3
-                  text-base
-                  font-medium
-                  transition-all
-                  duration-200
-                  hover:-translate-y-0.5
-                  hover:border-[#FF5C35]
-                  hover:bg-[#FF5C35]
-                  hover:text-white
-                  md:text-lg
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-[0.2em]
+                  text-[#FF5C35]
+                  md:text-sm
                 "
               >
-                {skill}
-              </span>
-            ))}
-          </div>
+                04 — {isID ? "Skill" : "Skills"}
+              </p>
+
+              <h2
+                className="
+                  mt-4
+                  font-[var(--font-space-grotesk)]
+                  text-4xl
+                  font-bold
+                  tracking-[-0.06em]
+                  md:text-5xl
+                "
+              >
+                {isID
+                  ? "Tools yang saya gunakan."
+                  : "Tools I use."}
+              </h2>
+            </div>
+          </Reveal>
+
+          <Reveal variant="right" delay={120}>
+            <div className="flex content-start flex-wrap gap-3">
+              {skills.map((skill, index) => (
+                <span
+                  key={skill}
+                  className="
+                    border
+                    border-[#111111]/20
+                    px-5
+                    py-3
+                    text-base
+                    font-medium
+                    transition-all
+                    duration-200
+                    hover:-translate-y-0.5
+                    hover:border-[#FF5C35]
+                    hover:bg-[#FF5C35]
+                    hover:text-white
+                    md:text-lg
+                  "
+                  style={{
+                    animationDelay: `${index * 50}ms`,
+                  }}
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -1697,9 +1777,11 @@ export default function Home() {
             lg:py-32
           "
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">
-            05 — {isID ? "Kontak" : "Contact"}
-          </p>
+          <Reveal variant="left">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">
+              05 — {isID ? "Kontak" : "Contact"}
+            </p>
+          </Reveal>
 
           <div
             className="
@@ -1712,85 +1794,89 @@ export default function Home() {
               lg:items-end
             "
           >
-            <h2
-              className="
-                max-w-4xl
-                font-[var(--font-space-grotesk)]
-                text-5xl
-                font-bold
-                leading-[0.9]
-                tracking-[-0.07em]
-                md:text-7xl
-              "
-            >
-              {isID ? (
-                <>
-                  Mari terhubung
-                  <br />
-                  dan buat sesuatu.
-                </>
-              ) : (
-                <>
-                  Let&apos;s connect
-                  <br />
-                  and build something.
-                </>
-              )}
-            </h2>
-
-            <div
-              className="
-                flex
-                min-w-[240px]
-                flex-col
-                gap-4
-                text-lg
-                font-medium
-              "
-            >
-              <a
-                href="mailto:albarfahrezi7@gmail.com"
+            <Reveal variant="left" delay={100}>
+              <h2
                 className="
-                  border-b
-                  border-[#111111]
-                  pb-2
-                  transition-opacity
-                  hover:opacity-60
+                  max-w-4xl
+                  font-[var(--font-space-grotesk)]
+                  text-5xl
+                  font-bold
+                  leading-[0.9]
+                  tracking-[-0.07em]
+                  md:text-7xl
                 "
               >
-                albarfahrezi7@gmail.com
-              </a>
+                {isID ? (
+                  <>
+                    Mari terhubung
+                    <br />
+                    dan buat sesuatu.
+                  </>
+                ) : (
+                  <>
+                    Let&apos;s connect
+                    <br />
+                    and build something.
+                  </>
+                )}
+              </h2>
+            </Reveal>
 
-              <a
-                href="https://github.com/AlbarFahrezi"
-                target="_blank"
-                rel="noopener noreferrer"
+            <Reveal variant="right" delay={220}>
+              <div
                 className="
-                  border-b
-                  border-[#111111]
-                  pb-2
-                  transition-opacity
-                  hover:opacity-60
+                  flex
+                  min-w-[240px]
+                  flex-col
+                  gap-4
+                  text-lg
+                  font-medium
                 "
               >
-                GitHub ↗
-              </a>
+                <a
+                  href="mailto:albarfahrezi7@gmail.com"
+                  className="
+                    border-b
+                    border-[#111111]
+                    pb-2
+                    transition-opacity
+                    hover:opacity-60
+                  "
+                >
+                  albarfahrezi7@gmail.com
+                </a>
 
-              <a
-                href="https://www.linkedin.com/in/albar-fahrezi-65b30a395/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  border-b
-                  border-[#111111]
-                  pb-2
-                  transition-opacity
-                  hover:opacity-60
-                "
-              >
-                LinkedIn ↗
-              </a>
-            </div>
+                <a
+                  href="https://github.com/AlbarFahrezi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    border-b
+                    border-[#111111]
+                    pb-2
+                    transition-opacity
+                    hover:opacity-60
+                  "
+                >
+                  GitHub ↗
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/in/albar-fahrezi-65b30a395/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    border-b
+                    border-[#111111]
+                    pb-2
+                    transition-opacity
+                    hover:opacity-60
+                  "
+                >
+                  LinkedIn ↗
+                </a>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
