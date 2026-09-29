@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "./components/LanguageProvider";
+
 import {
   useEffect,
   useRef,
@@ -10,11 +12,14 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
+
 const projects = [
   {
     number: "01",
     title: "Authentication API",
     slug: "/projects/authentication-api",
+    github:
+      "https://github.com/AlbarFahrezi/Authentication-Server-API",
     description: {
       id: "REST API untuk authentication dan authorization dengan sistem role administrator dan operator.",
       en: "REST API for authentication and authorization with administrator and operator roles.",
@@ -25,6 +30,8 @@ const projects = [
     number: "02",
     title: "Inventory Management API",
     slug: "/projects/inventory-management-api",
+    github:
+      "https://github.com/AlbarFahrezi/Inventory-Stock-Management-API",
     description: {
       id: "API untuk mengelola produk, stok, transaksi IN/OUT, stock history, dan proses inventory.",
       en: "API for managing products, stock, IN/OUT transactions, stock history, and inventory processes.",
@@ -35,12 +42,15 @@ const projects = [
     number: "03",
     title: "Approval Workflow System",
     slug: "/projects/approval-workflow",
+    github:
+      "https://github.com/AlbarFahrezi/approval_workflow_api",
     description: {
       id: "Sistem workflow untuk mengelola proses pengajuan dari draft hingga approval.",
       en: "A workflow system for managing submissions from draft to approval.",
     },
     tags: ["Laravel", "React", "MySQL", "REST API"],
   },
+ 
 ];
 
 const skills = [
@@ -52,6 +62,10 @@ const skills = [
   "MySQL",
   "REST API",
   "Git",
+  "Tailwind CSS",
+  "Figma",
+  "Angular",
+  "Docker",
 ];
 
 const navItems = [
@@ -253,7 +267,8 @@ function HangingNameTag() {
       }
     };
 
-    animationRef.current = requestAnimationFrame(animate);
+    animationRef.current =
+      requestAnimationFrame(animate);
   };
 
   /* =======================================================
@@ -792,7 +807,8 @@ function HangingNameTag() {
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [language, setLanguage] = useState<"id" | "en">("en");
+
+  const { language, setLanguage } = useLanguage();
 
   const isID = language === "id";
 
@@ -825,7 +841,8 @@ export default function Home() {
                 tracking-[-0.05em]
               "
             >
-              ALBAR<span className="text-[#FF5C35]">.</span>
+              ALBAR
+              <span className="text-[#FF5C35]">.</span>           
             </Link>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -1146,8 +1163,8 @@ export default function Home() {
 
               <span className="text-[#6B6B6B]">
                 {isID
-                  ? "yang suka membangun sesuatu."
-                  : "who loves building things."}
+                  ? "Dengan Logika, Kita Menciptakan Keajaiban."
+                  : "With The Logic We Create Magic."}
               </span>
             </h2>
           </div>
@@ -1174,8 +1191,8 @@ export default function Home() {
                 "
               >
                 {isID
-                  ? "Kumpulan perjalanan PKL, project, eksperimen, dan hal-hal yang saya pelajari selama membangun software."
-                  : "A personal collection of my internship journey, projects, experiments, and things I learned while building software."}
+                  ? "Kumpulan perjalanan PKL, project, eksperimen, dan hal-hal yang saya pelajari selama membangun website."
+                  : "A personal collection of my internship journey, projects, experiments, and things I learned while building websites."}
               </p>
 
               <a
@@ -1551,7 +1568,7 @@ export default function Home() {
                     </>
                   ) : (
                     <>
-                      Things I&apos;ve
+                      Things I've
                       <br />
                       <span className="text-[#6B6B6B]">
                         built.
@@ -1576,8 +1593,7 @@ export default function Home() {
                 delay={index * 120}
                 variant="up"
               >
-                <Link
-                  href={project.slug}
+                <div
                   className="
                     group
                     grid
@@ -1651,23 +1667,53 @@ export default function Home() {
                         : project.description.en}
                     </p>
 
-                    <span
-                      className="
-                        text-sm
-                        font-semibold
-                        opacity-0
-                        transition-all
-                        duration-300
-                        group-hover:translate-x-1
-                        group-hover:opacity-100
-                      "
-                    >
-                      {isID
-                        ? "Lihat project ↗"
-                        : "View project ↗"}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-5">
+                      <Link
+                        href={project.slug}
+                        className="
+                          inline-flex
+                          items-center
+                          gap-2
+                          text-sm
+                          font-semibold
+                          transition-all
+                          duration-300
+                          hover:gap-3
+                          hover:text-[#FF5C35]
+                        "
+                      >
+                        {isID
+                          ? "Lihat project"
+                          : "View project"}
+
+                        <span className="text-[#FF5C35]">
+                          ↗
+                        </span>
+                      </Link>
+
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                          inline-flex
+                          items-center
+                          gap-2
+                          text-sm
+                          font-semibold
+                          text-[#6B6B6B]
+                          transition-all
+                          duration-300
+                          hover:gap-3
+                          hover:text-[#111111]
+                        "
+                      >
+                        GitHub
+                        <span>↗</span>
+                      </a>
+                    </div>
                   </div>
-                </Link>
+                </div>
               </Reveal>
             ))}
           </div>
@@ -1814,7 +1860,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    Let&apos;s connect
+                    Let's connect
                     <br />
                     and build something.
                   </>
@@ -1907,7 +1953,7 @@ export default function Home() {
           </span>
 
           <span>
-            Built with Next.js &amp; Tailwind CSS
+            Built with Next.js & Tailwind CSS
           </span>
         </div>
       </footer>

@@ -1,10 +1,42 @@
+"use client";
+
 import Link from "next/link";
 import ProjectVisual from "@/app/components/ProjectVisual";
+import { useLanguage } from "@/app/components/LanguageProvider";
+
+const workflowSteps = [
+  {
+    id: "Draft",
+    en: "Draft",
+  },
+  {
+    id: "Submit",
+    en: "Submit",
+  },
+  {
+    id: "Review",
+    en: "Review",
+  },
+  {
+    id: "Approve",
+    en: "Approve",
+  },
+  {
+    id: "Reject",
+    en: "Reject",
+  },
+  {
+    id: "Workflow History",
+    en: "Workflow History",
+  },
+];
 
 export default function ApprovalWorkflowPage() {
+  const { language } = useLanguage();
+  const isID = language === "id";
+
   return (
     <main className="min-h-screen bg-[#F5F3EE] text-[#111111]">
-
       {/* NAVBAR */}
       <nav className="sticky top-0 z-50 border-b border-[#111111]/10 bg-[#F5F3EE]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
@@ -19,7 +51,7 @@ export default function ApprovalWorkflowPage() {
             href="/#projects"
             className="text-sm font-semibold transition-colors hover:text-[#FF5C35]"
           >
-            ← Back to Projects
+            {isID ? "← Kembali ke Project" : "← Back to Projects"}
           </Link>
         </div>
       </nav>
@@ -34,14 +66,13 @@ export default function ApprovalWorkflowPage() {
           <h1 className="font-[var(--font-space-grotesk)] text-5xl font-bold leading-[0.9] tracking-[-0.07em] md:text-7xl lg:text-8xl">
             Approval
             <br />
-            <span className="text-[#FF5C35]">
-              Workflow.
-            </span>
+            <span className="text-[#FF5C35]">Workflow.</span>
           </h1>
 
           <p className="max-w-md text-base leading-8 text-[#6B6B6B] md:text-lg">
-            Sistem workflow untuk mengelola proses pengajuan dari draft,
-            submission, approval, hingga rejection.
+            {isID
+              ? "Sistem workflow untuk mengelola proses pengajuan dari draft, submission, approval, hingga rejection."
+              : "A workflow system for managing submissions from draft and submission to approval and rejection."}
           </p>
         </div>
       </section>
@@ -50,7 +81,7 @@ export default function ApprovalWorkflowPage() {
       <section className="border-t border-[#111111]/10 bg-[#111111] text-white">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
           <p className="mb-10 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
-            Project Visual
+            {isID ? "Visual Project" : "Project Visual"}
           </p>
 
           <ProjectVisual type="workflow" />
@@ -62,18 +93,18 @@ export default function ApprovalWorkflowPage() {
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
           <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
-              01 — Overview
+              01 — {isID ? "Gambaran Umum" : "Overview"}
             </p>
 
             <div>
               <h2 className="font-[var(--font-space-grotesk)] text-3xl font-bold tracking-[-0.05em] md:text-5xl">
-                What I built.
+                {isID ? "Yang saya bangun." : "What I built."}
               </h2>
 
               <p className="mt-8 max-w-3xl text-base leading-8 text-[#6B6B6B] md:text-lg">
-                Approval Workflow System dibuat untuk memahami bagaimana
-                sebuah proses pengajuan dapat memiliki beberapa status dan
-                perubahan state berdasarkan aksi user.
+                {isID
+                  ? "Approval Workflow System dibuat untuk memahami bagaimana sebuah proses pengajuan dapat memiliki beberapa status dan perubahan state berdasarkan aksi user."
+                  : "The Approval Workflow System was built to understand how a submission process can have multiple statuses and state changes based on user actions."}
               </p>
             </div>
           </div>
@@ -84,7 +115,7 @@ export default function ApprovalWorkflowPage() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
-            02 — Technology
+            02 — {isID ? "Teknologi" : "Technology"}
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -111,20 +142,13 @@ export default function ApprovalWorkflowPage() {
       <section className="border-t border-[#111111]/10 bg-[#111111] text-white">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
-            03 — Workflow
+            03 — {isID ? "Alur Workflow" : "Workflow"}
           </p>
 
           <div className="mt-12 grid gap-0 md:grid-cols-2">
-            {[
-              "Draft",
-              "Submit",
-              "Review",
-              "Approve",
-              "Reject",
-              "Workflow History",
-            ].map((feature, index) => (
+            {workflowSteps.map((step, index) => (
               <div
-                key={feature}
+                key={step.en}
                 className="border-t border-white/20 py-6"
               >
                 <span className="text-sm text-[#FF5C35]">
@@ -132,7 +156,7 @@ export default function ApprovalWorkflowPage() {
                 </span>
 
                 <h3 className="mt-3 font-[var(--font-space-grotesk)] text-2xl font-bold">
-                  {feature}
+                  {isID ? step.id : step.en}
                 </h3>
               </div>
             ))}
@@ -144,19 +168,18 @@ export default function ApprovalWorkflowPage() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
-            04 — Learning
+            04 — {isID ? "Pembelajaran" : "Learning"}
           </p>
 
           <div>
             <h2 className="font-[var(--font-space-grotesk)] text-3xl font-bold tracking-[-0.05em] md:text-5xl">
-              What I learned.
+              {isID ? "Yang saya pelajari." : "What I learned."}
             </h2>
 
             <p className="mt-8 max-w-3xl text-base leading-8 text-[#6B6B6B] md:text-lg">
-              Project ini membantu saya memahami konsep workflow,
-              state transition, API integration, frontend-backend
-              communication, serta bagaimana menjaga agar perubahan status
-              hanya dapat dilakukan sesuai aturan sistem.
+              {isID
+                ? "Project ini membantu saya memahami konsep workflow, state transition, API integration, frontend-backend communication, serta bagaimana menjaga agar perubahan status hanya dapat dilakukan sesuai aturan sistem."
+                : "This project helped me understand workflow concepts, state transitions, API integration, frontend-backend communication, and how to ensure that status changes only happen according to system rules."}
             </p>
           </div>
         </div>
@@ -168,11 +191,10 @@ export default function ApprovalWorkflowPage() {
           <span>Approval Workflow System</span>
 
           <Link href="/#projects" className="hover:opacity-60">
-            Back to Projects ↗
+            {isID ? "Kembali ke Project ↗" : "Back to Projects ↗"}
           </Link>
         </div>
       </footer>
-
     </main>
   );
 }

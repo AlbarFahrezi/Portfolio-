@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "./components/LanguageProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -45,7 +46,9 @@ export default function RootLayout({
       lang="id"
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
     >
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }
