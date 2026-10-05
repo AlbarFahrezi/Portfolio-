@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "./components/LanguageProvider";
-import HangingNameTag from "./components/HangingNameTag";
+import HeroStage from "./components/HeroStage";
 import {
   ScrollProgress,
   Typewriter,
@@ -11,12 +11,9 @@ import {
   useActiveSection,
   Reveal,
   JourneyTimeline,
-  MaskLines,
-  ParallaxHero,
   MagneticLink,
   TerminalDemo,
   CursorPreview,
-  HeroNetwork,
 } from "./components/AnimatedExtras";
 
 import { useRef, useState, type CSSProperties } from "react";
@@ -99,25 +96,25 @@ type School = {
    isi years (mis. "2012 — 2018"), dan taruh logo di /public/images/schools/ */
 const schools: School[] = [
   {
-    short: "SDN",
-    name: "SDN RAWASARI",
+    short: "SD",
+    name: "SD RAWASARI",
     level: { id: "Sekolah Dasar", en: "Elementary School" },
     logo: "/images/schools/sd-rawasari.png",
-    href: "https://sekolah.data.kemdikbud.go.id/",
+    href: "https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/20233197",
   },
   {
     short: "SMPN 6",
     name: "SMPN 6 SUBANG",
     level: { id: "Sekolah Menengah Pertama", en: "Junior High School" },
     logo: "/images/schools/smpn-6-subang.png",
-    href: "https://sekolah.data.kemdikbud.go.id/",
+    href: "https://referensi.data.kemendikdasmen.go.id/residu/satuanpendidikan/detail/20217013",
   },
   {
     short: "SMKN 1",
     name: "SMKN 1 SUBANG",
     level: { id: "Sekolah Menengah Kejuruan", en: "Vocational High School" },
     logo: "/images/schools/smkn-1-subang.png",
-    href: "https://sekolah.data.kemdikbud.go.id/",
+    href: "https://smkn1subang.sch.id/",
   },
 ];
 
@@ -193,7 +190,7 @@ const contacts: { key: ContactKey; label: string; href: string }[] = [
   { key: "email", label: "Email", href: "mailto:albarfahrezi7@gmail.com" },
   { key: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/albar-fahrezi-65b30a395/" },
   { key: "github", label: "GitHub", href: "https://github.com/AlbarFahrezi" },
-  { key: "phone", label: "Phone", href: "" }, // contoh: "tel:+6281234567890"
+  
   { key: "instagram", label: "Instagram", href: "https://www.instagram.com/rzexxtr/" },
   { key: "youtube", label: "YouTube", href: "" },
 ];
@@ -316,7 +313,7 @@ export default function Home() {
               className="font-[var(--font-space-grotesk)] text-lg font-bold tracking-[-0.05em]"
             >
               ALBAR
-              <span className="text-[#FF5C35]">.</span>
+              <span className="text-[#FF5C35]"></span>
             </Link>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -433,61 +430,42 @@ export default function Home() {
           HERO
       ================================================== */}
 
-      <section
-        id="home"
-        className="relative isolate mx-auto flex min-h-[calc(100vh-81px)] max-w-7xl flex-col justify-center overflow-visible px-6 py-20 lg:px-10"
-      >
-        <HeroNetwork />
-
-        <div className="animate-fade-in mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] sm:text-sm">
-          <span className="h-2 w-2 shrink-0 rounded-full bg-[#FF5C35]" />
+      <HeroStage>
+        <div className="animate-fade-in flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/60 sm:text-sm">
+          
 
           {isID
-            ? "Personal Portfolio · Perjalanan PKL"
-            : "Personal Portfolio · PKL Journey"}
+            ? ""
+            : ""}
         </div>
 
-        <div className="grid gap-16 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
-          <ParallaxHero>
-            <p className="animate-fade-in mb-5 text-base text-[#6B6B6B] md:text-lg">
-              {isID ? "Halo, saya" : "Hello, I'm"}
-            </p>
+        <div>
+          <div className="grid items-end gap-10 lg:grid-cols-2">
+            <div className="animate-fade-up-delay-2">
+              <p className="mb-3 text-base text-white/60 md:text-lg">
+                {isID ? "Halo, saya" : "Hello, I'm"}
+              </p>
 
-            <h1 className="font-[var(--font-space-grotesk)] text-[clamp(4rem,12vw,10rem)] font-bold leading-[0.78] tracking-[-0.08em]">
-              <MaskLines
-                lines={[
-                  "ALBAR",
-                  <>
-                    FAHREZI<span className="text-[#FF5C35]">.</span>
-                  </>,
-                ]}
-              />
-            </h1>
+              <h2 className="font-[var(--font-space-grotesk)] text-3xl font-semibold leading-[1.05] tracking-[-0.05em] md:text-5xl">
+                Fullstack Developer
+                <br />
+                <span className="text-[#FF5C35]">
+                  <Typewriter words={roles} />
+                </span>
+              </h2>
+            </div>
 
-            <h2 className="animate-fade-up-delay-2 mt-10 max-w-3xl font-[var(--font-space-grotesk)] text-3xl font-semibold leading-[1.05] tracking-[-0.05em] md:text-5xl lg:text-6xl">
-              Fullstack Developer
-              <br />
-              <span className="text-[#6B6B6B]">
-                <Typewriter words={roles} />
-              </span>
-            </h2>
-          </ParallaxHero>
-
-          <div className="animate-fade-up-delay flex flex-col items-end lg:pt-8">
-            {/* Ruang untuk name tag, hanya di desktop */}
-            <div className="hidden h-[600px] w-full lg:block" />
-
-            <div className="mt-8 w-full max-w-md">
-              <p className="text-base leading-7 text-[#6B6B6B] md:text-lg md:leading-8">
+            <div className="animate-fade-up-delay lg:ml-auto lg:max-w-md">
+              <p className="text-base leading-7 text-white/60 md:text-lg md:leading-8">
                 {isID
-                  ? "Kumpulan perjalanan PKL, project, eksperimen, dan hal-hal yang saya pelajari selama membangun website."
-                  : "A personal collection of my internship journey, projects, experiments, and things I learned while building websites."}
+                  ? ""
+                  : ""}
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-6">
                 <MagneticLink
                   href="#projects"
-                  className="inline-flex items-center gap-3 border-b-2 border-[#111111] pb-2 text-sm font-semibold md:text-base"
+                  className="inline-flex items-center gap-3 border-b-2 border-white pb-2 text-sm font-semibold md:text-base"
                 >
                   {isID ? "Lihat project saya" : "Explore my projects"}
                   <span className="text-[#FF5C35]">↗</span>
@@ -496,29 +474,29 @@ export default function Home() {
                 <MagneticLink
                   href="/cv.pdf"
                   download
-                  className="inline-flex items-center rounded-full bg-[#111111] px-5 py-2.5 text-sm font-semibold !text-white hover:bg-[#FF5C35]"
+                  className="inline-flex items-center rounded-full bg-[#F5F3EE] px-5 py-2.5 text-sm font-semibold !text-[#111111] hover:bg-[#FF5C35] hover:!text-white"
                 >
                   {isID ? "Unduh CV" : "Download CV"}
                 </MagneticLink>
               </div>
             </div>
           </div>
-        </div>
 
-        <HangingNameTag />
+          <div className="animate-fade-up-delay-2 mt-12 border-t border-white/20 pt-5">
+            <div className="flex flex-col justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50 sm:flex-row sm:text-xs">
+              <span>
+                {isID ? "Berbasis di Indonesia" : "Based in Indonesia"}
+              </span>
 
-        <div className="animate-fade-up-delay-2 mt-20 border-t border-[#111111]/20 pt-5">
-          <div className="flex flex-col justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6B6B6B] sm:flex-row sm:text-xs">
-            <span>{isID ? "Berbasis di Indonesia" : "Based in Indonesia"}</span>
+              <span>2026 — PKL Portfolio</span>
 
-            <span>2026 — PKL Portfolio</span>
-
-            <span>
-              {isID ? "Scroll untuk melihat ↓" : "Scroll to explore ↓"}
-            </span>
+              <span>
+                {isID ? "Scroll untuk melihat ↓" : "Scroll to explore ↓"}
+              </span>
+            </div>
           </div>
         </div>
-      </section>
+      </HeroStage>
 
       {/* ==================================================
           ABOUT
@@ -851,7 +829,7 @@ export default function Home() {
                     </>
                   ) : (
                     <>
-                      Education
+                      Educational
                       <br />
                       <span className="text-white/40">Background.</span>
                     </>
@@ -859,7 +837,11 @@ export default function Home() {
                 </h2>
               </div>
 
-              
+              <p className="max-w-sm text-base leading-7 text-white/60">
+                {isID
+                  ? ""
+                  : ""}
+              </p>
             </div>
           </Reveal>
 

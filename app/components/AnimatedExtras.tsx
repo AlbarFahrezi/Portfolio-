@@ -843,7 +843,11 @@ export function CursorPreview({
    paket data oranye berjalan di sepanjang garis.
 ========================================================= */
 
-export function HeroNetwork() {
+export function HeroNetwork({
+  variant = "light",
+}: {
+  variant?: "light" | "dark";
+}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -859,6 +863,7 @@ export function HeroNetwork() {
     type Node = { x: number; y: number; vx: number; vy: number; bx: number; by: number };
     type Packet = { a: number; b: number; t: number; s: number };
 
+    const ink = variant === "dark" ? "245,243,238" : "17,17,17";
     const LINK = 150;
     const GRID = 28;
     const MOUSE_R = 160;
@@ -884,7 +889,7 @@ export function HeroNetwork() {
       /* ---------- Dot grid ---------- */
       const near: { x: number; y: number; k: number }[] = [];
 
-      ctx.fillStyle = "rgba(17,17,17,0.10)";
+      ctx.fillStyle = `rgba(${ink},${variant === "dark" ? 0.14 : 0.1})`;
       ctx.beginPath();
 
       for (let gx = GRID / 2; gx < w; gx += GRID) {
@@ -954,7 +959,7 @@ export function HeroNetwork() {
         for (let j = i + 1; j < nodes.length; j++) {
           const d = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
           if (d < LINK) {
-            ctx.strokeStyle = `rgba(17,17,17,${(1 - d / LINK) * 0.16})`;
+            ctx.strokeStyle = `rgba(${ink},${(1 - d / LINK) * 0.16})`;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -979,7 +984,7 @@ export function HeroNetwork() {
           }
         }
 
-        ctx.fillStyle = k > 0 ? `rgba(255,92,53,${0.4 + k * 0.6})` : "rgba(17,17,17,0.35)";
+        ctx.fillStyle = k > 0 ? `rgba(255,92,53,${0.4 + k * 0.6})` : `rgba(${ink},0.35)`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, 2 + k * 1.5, 0, Math.PI * 2);
         ctx.fill();
@@ -1107,7 +1112,7 @@ export function HeroNetwork() {
     }
 
     return () => resizeObserver.disconnect();
-  }, []);
+  }, [variant]);
 
   return (
     <canvas
@@ -1239,9 +1244,17 @@ export function IntroLoader() {
       <div className="absolute inset-4 rounded-3xl border border-[#111111]/20 md:inset-5" />
 
       {/* Header kecil */}
-     
+      <div className="absolute left-9 top-9 font-[var(--font-space-grotesk)] text-sm font-bold tracking-[-0.04em] md:left-12 md:top-12">
+        ALBAR<span className="text-[#FF5C35]">.</span>
+      </div>
 
-     
+      <button
+        type="button"
+        onClick={() => setLeaving(true)}
+        className="absolute right-9 top-8 rounded-full border border-[#111111]/20 px-4 py-1.5 text-xs font-semibold text-[#6B6B6B] transition-colors hover:border-[#FF5C35] hover:text-[#FF5C35] md:right-12 md:top-11"
+      >
+        Skip ↗
+      </button>
 
       {/* Sapaan */}
       <div className="relative flex h-full flex-col items-center justify-center px-6">
