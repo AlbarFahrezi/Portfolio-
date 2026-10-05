@@ -196,5 +196,5 @@ export default function ApprovalWorkflowPage() {
         </div>
       </footer>
     </main>
-  );
+  );  
 }

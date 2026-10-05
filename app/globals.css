@@ -111,8 +111,6 @@ img {
   filter: blur(0);
 }
 
-/* Dari kiri */
-
 .reveal-left {
   opacity: 0;
   transform: translateX(-48px);
@@ -131,8 +129,6 @@ img {
   filter: blur(0);
 }
 
-/* Dari kanan */
-
 .reveal-right {
   opacity: 0;
   transform: translateX(48px);
@@ -150,8 +146,6 @@ img {
   transform: translateX(0);
   filter: blur(0);
 }
-
-/* Scale kecil */
 
 .reveal-scale {
   opacity: 0;
@@ -201,29 +195,100 @@ img {
 }
 
 /* =========================================================
-   PROJECT HOVER
+   TYPEWRITER CARET
 ========================================================= */
 
-.project-row {
-  transition:
-    background-color 300ms ease,
-    transform 300ms ease;
+@keyframes caretBlink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-.project-row:hover {
-  transform: translateX(4px);
+.animate-caret {
+  animation: caretBlink 1s steps(1) infinite;
 }
 
 /* =========================================================
-   SKILL HOVER
+   MARQUEE
 ========================================================= */
 
-.skill-tag {
-  transition:
-    transform 200ms ease,
-    border-color 200ms ease,
-    background-color 200ms ease,
-    color 200ms ease;
+@keyframes marqueeMove {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marqueeMove 32s linear infinite;
+}
+
+.marquee-reverse {
+  animation-direction: reverse;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* =========================================================
+   SKILL POP (stagger lewat variable --i)
+========================================================= */
+
+@keyframes skillPop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.skill-pop {
+  opacity: 0;
+}
+
+.is-visible .skill-pop {
+  animation: skillPop 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* =========================================================
+   NAV LINK (garis bawah untuk menu aktif / hover)
+========================================================= */
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: #ff5c35;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-link[data-active="true"]::after,
+.nav-link:hover::after {
+  transform: scaleX(1);
 }
 
 /* =========================================================
@@ -253,6 +318,15 @@ img {
     transition: none;
   }
 
+  .marquee-track {
+    animation: none;
+  }
+
+  .skill-pop {
+    opacity: 1;
+    animation: none !important;
+  }
+
   *,
   *::before,
   *::after {
@@ -260,4 +334,86 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* =========================================================
+   MASK REVEAL (judul hero)
+========================================================= */
+
+@keyframes maskUp {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.mask-inner {
+  animation: maskUp 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* =========================================================
+   MAGNETIC LINK
+========================================================= */
+
+.magnetic {
+  transition:
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+/* =========================================================
+   LENIS SMOOTH SCROLL
+========================================================= */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   INTRO LOADER
+========================================================= */
+
+@keyframes greetIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.greet-in {
+  animation: greetIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Tahan animasi hero sampai intro selesai */
+body:has(.intro-overlay)
+  :is(
+    .mask-inner,
+    .animate-fade-in,
+    .animate-fade-up,
+    .animate-fade-up-delay,
+    .animate-fade-up-delay-2
+  ):not(.intro-overlay *) {
+  animation-play-state: paused;
+}
+
+/* Fade antar halaman (template.tsx) */
+.page-fade {
+  animation: fadeIn 0.6s ease-out both;
 }
