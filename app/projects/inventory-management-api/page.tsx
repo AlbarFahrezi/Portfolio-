@@ -60,7 +60,7 @@ export default function InventoryManagementApiPage() {
             href="/"
             className="font-[var(--font-space-grotesk)] text-lg font-bold tracking-[-0.05em]"
           >
-            ALBAR<span className="text-[#FF5C35]">.</span>
+            ALBAR<span className="text- [#FF5C35]"></span>
           </Link>
 
           <Link

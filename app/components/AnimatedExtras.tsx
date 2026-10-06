@@ -766,8 +766,8 @@ export function CursorPreview({
       const tilt = (target.x - pos.x) * 0.05;
 
       if (boxRef.current) {
-        boxRef.current.style.transform = `translate3d(${pos.x + 28}px, ${
-          pos.y - 120
+        boxRef.current.style.transform = `translate3d(${pos.x + 22}px, ${
+          pos.y + 18
         }px, 0) rotate(${tilt}deg)`;
       }
       raf = requestAnimationFrame(loop);
@@ -789,7 +789,7 @@ export function CursorPreview({
       className="pointer-events-none fixed left-0 top-0 z-40 hidden md:block"
     >
       <div
-        className={`relative h-[210px] w-[290px] overflow-hidden rounded-2xl border border-[#111111]/15 bg-[#111111] shadow-[0_30px_70px_rgba(0,0,0,0.25)] transition-all duration-300 ease-out ${
+        className={`relative h-[132px] w-[200px] overflow-hidden rounded-xl border border-[#111111]/15 bg-[#111111] shadow-[0_16px_36px_rgba(0,0,0,0.22)] transition-all duration-300 ease-out ${
           activeIndex === null
             ? "scale-90 opacity-0"
             : "scale-100 opacity-100"
@@ -798,7 +798,7 @@ export function CursorPreview({
         {items.map((item, i) => (
           <div
             key={item.number}
-            className={`absolute inset-0 flex flex-col justify-between p-5 text-white transition-opacity duration-300 ${
+            className={`absolute inset-0 flex flex-col justify-between p-3.5 text-white transition-opacity duration-300 ${
               activeIndex === i ? "opacity-100" : "opacity-0"
             }`}
             style={
@@ -816,15 +816,15 @@ export function CursorPreview({
           >
             {!item.image && (
               <>
-                <span className="font-[var(--font-space-grotesk)] text-6xl font-bold tracking-[-0.06em] text-[#FF5C35]">
+                <span className="font-[var(--font-space-grotesk)] text-3xl font-bold tracking-[-0.06em] text-[#FF5C35]">
                   {item.number}
                 </span>
 
                 <div>
-                  <p className="font-[var(--font-space-grotesk)] text-xl font-bold leading-tight tracking-[-0.03em]">
+                  <p className="font-[var(--font-space-grotesk)] text-sm font-bold leading-tight tracking-[-0.02em]">
                     {item.title}
                   </p>
-                  <p className="mt-2 text-xs text-white/50">
+                  <p className="mt-1 text-[10px] text-white/50">
                     {item.tags.join(" · ")}
                   </p>
                 </div>

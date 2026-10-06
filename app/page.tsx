@@ -485,12 +485,6 @@ export default function Home() {
           <div className="animate-fade-up-delay-2 mt-12 border-t border-white/20 pt-5">
             <div className="flex flex-col justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50 sm:flex-row sm:text-xs">
               <span>
-                {isID ? "Berbasis di Indonesia" : "Based in Indonesia"}
-              </span>
-
-              <span>2026 — PKL Portfolio</span>
-
-              <span>
                 {isID ? "Scroll untuk melihat ↓" : "Scroll to explore ↓"}
               </span>
             </div>
