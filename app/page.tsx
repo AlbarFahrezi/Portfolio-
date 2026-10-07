@@ -96,24 +96,24 @@ type School = {
 const schools: School[] = [
   {
     short: "SD",
-    name: "SD Rawasari",
+    name: "SD RAWASARI",
     level: { id: "Sekolah Dasar", en: "Elementary School" },
     logo: "/images/schools/sd-rawasari.png",
-    href: "https://sekolah.data.kemdikbud.go.id/",
+    href: "https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/20233197",
   },
   {
     short: "SMPN 6",
-    name: "SMPN 6 Subang",
+    name: "SMPN 6 SUBANG",
     level: { id: "Sekolah Menengah Pertama", en: "Junior High School" },
     logo: "/images/schools/smpn-6-subang.png",
-    href: "https://sekolah.data.kemdikbud.go.id/",
+    href: "https://referensi.data.kemendikdasmen.go.id/residu/satuanpendidikan/detail/20217013",
   },
   {
     short: "SMKN 1",
-    name: "SMKN 1 Subang",
+    name: "SMKN 1 SUBANG",
     level: { id: "Sekolah Menengah Kejuruan", en: "Vocational High School" },
     logo: "/images/schools/smkn-1-subang.png",
-    href: "https://sekolah.data.kemdikbud.go.id/",
+    href: "https://smkn1subang.sch.id/",
   },
 ];
 
@@ -1005,12 +1005,7 @@ export default function Home() {
                   )}
                 </h2>
               </div>
-
-              <p className="max-w-sm text-base leading-7 text-white/60">
-                {isID
-                  ? "Klik logo untuk membuka halaman sekolah."
-                  : "Click a logo to visit the school page."}
-              </p>
+              
             </div>
           </Reveal>
 
