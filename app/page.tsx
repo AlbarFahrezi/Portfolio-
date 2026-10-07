@@ -12,11 +12,10 @@ import {
   Reveal,
   JourneyTimeline,
   MagneticLink,
-  TerminalDemo,
   CursorPreview,
 } from "./components/AnimatedExtras";
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 const projects = [
   {
@@ -72,7 +71,7 @@ const skills = [
 const navItems = [
   { id: "about", idLabel: "Tentang", enLabel: "About" },
   { id: "journey", idLabel: "Perjalanan", enLabel: "Journey" },
-  { id: "projects", idLabel: "Project", enLabel: "Projects" },
+  { id: "certificates", idLabel: "Sertifikat", enLabel: "Certificates" },
   { id: "education", idLabel: "Pendidikan", enLabel: "Education" },
   { id: "skills", idLabel: "Skill", enLabel: "Skills" },
   { id: "contact", idLabel: "Kontak", enLabel: "Contact" },
@@ -97,24 +96,24 @@ type School = {
 const schools: School[] = [
   {
     short: "SD",
-    name: "SD RAWASARI",
+    name: "SD Rawasari",
     level: { id: "Sekolah Dasar", en: "Elementary School" },
     logo: "/images/schools/sd-rawasari.png",
-    href: "https://referensi.data.kemendikdasmen.go.id/pendidikan/npsn/20233197",
+    href: "https://sekolah.data.kemdikbud.go.id/",
   },
   {
     short: "SMPN 6",
-    name: "SMPN 6 SUBANG",
+    name: "SMPN 6 Subang",
     level: { id: "Sekolah Menengah Pertama", en: "Junior High School" },
     logo: "/images/schools/smpn-6-subang.png",
-    href: "https://referensi.data.kemendikdasmen.go.id/residu/satuanpendidikan/detail/20217013",
+    href: "https://sekolah.data.kemdikbud.go.id/",
   },
   {
     short: "SMKN 1",
-    name: "SMKN 1 SUBANG",
+    name: "SMKN 1 Subang",
     level: { id: "Sekolah Menengah Kejuruan", en: "Vocational High School" },
     logo: "/images/schools/smkn-1-subang.png",
-    href: "https://smkn1subang.sch.id/",
+    href: "https://sekolah.data.kemdikbud.go.id/",
   },
 ];
 
@@ -173,6 +172,180 @@ function SchoolCard({ school, isID }: { school: School; isID: boolean }) {
 }
 
 /* =========================================================
+   CERTIFICATES
+========================================================= */
+
+type Certificate = {
+  title: string;
+  issuer: string;
+  year: string;
+  image: string; // taruh file di /public/images/certificates/
+  href?: string; // link kredensial / verifikasi (opsional)
+};
+
+/* TODO: ganti dengan sertifikat asli kamu. Tambah / hapus item sesuka hati. */
+const certificates: Certificate[] = [
+  {
+    title: "MAKEREDU-ACADEMY/NgabuburIT",
+    issuer: "PT. Makerindo Prima Solusi",
+    year: "2026",
+    image: "/images/certificates/cert-1.jpg",
+  },
+  {
+    title: "Certificate Introduction to HTML",
+    issuer: "sololearn",
+    year: "2024",
+    image: "/images/certificates/cert-2.jpg",
+  },
+  {
+    title: "Nama Sertifikat 3",
+    issuer: "Penyelenggara",
+    year: "2026",
+    image: "/images/certificates/cert-3.jpg",
+  },
+];
+
+function CertificateCard({
+  cert,
+  onOpen,
+}: {
+  cert: Certificate;
+  onOpen: () => void;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group block w-full text-left"
+    >
+      <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-[#F5F3EE] transition-transform duration-500 ease-out group-hover:-translate-y-2">
+        {failed ? (
+          <div className="px-6 text-center">
+            <p className="font-[var(--font-space-grotesk)] text-xl font-bold tracking-[-0.04em] text-[#111111]/30 transition-colors duration-500 group-hover:text-[#FF5C35]">
+              {cert.title}
+            </p>
+          </div>
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={cert.image}
+            alt={cert.title}
+            draggable={false}
+            onError={() => setFailed(true)}
+            className="h-full w-full object-cover opacity-80 transition-all duration-500 ease-out group-hover:scale-105 group-hover:opacity-100"
+          />
+        )}
+
+        <span className="absolute right-4 top-4 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-[#111111] text-sm text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          ⤢
+        </span>
+      </div>
+
+      <div className="mt-5 border-t border-white/15 pt-4">
+        <p className="font-mono text-xs text-white/50">
+          {cert.issuer} · {cert.year}
+        </p>
+        <h3 className="mt-2 font-[var(--font-space-grotesk)] text-xl font-bold tracking-[-0.03em] transition-colors duration-300 group-hover:text-[#FF5C35]">
+          {cert.title}
+        </h3>
+      </div>
+    </button>
+  );
+}
+
+function CertificateLightbox({
+  cert,
+  isID,
+  onClose,
+}: {
+  cert: Certificate | null;
+  isID: boolean;
+  onClose: () => void;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [cert]);
+
+  useEffect(() => {
+    if (!cert) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [cert, onClose]);
+
+  if (!cert) return null;
+
+  return (
+    <div
+      data-lenis-prevent
+      onClick={onClose}
+      className="fixed inset-0 z-[90] flex flex-col items-center justify-center bg-black/85 p-6 backdrop-blur-sm"
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="absolute right-6 top-6 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl text-white transition-colors hover:bg-[#FF5C35]"
+      >
+        ×
+      </button>
+
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex max-h-full max-w-5xl flex-col items-center"
+      >
+        {failed ? (
+          <div className="rounded-2xl bg-[#F5F3EE] px-10 py-16 text-center text-[#111111]">
+            <p className="font-[var(--font-space-grotesk)] text-2xl font-bold">
+              {cert.title}
+            </p>
+            <p className="mt-2 text-sm text-[#6B6B6B]">
+              {isID ? "Gambar belum ditambahkan." : "Image not added yet."}
+            </p>
+          </div>
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={cert.image}
+            alt={cert.title}
+            onError={() => setFailed(true)}
+            className="max-h-[75vh] w-auto rounded-xl object-contain shadow-2xl"
+          />
+        )}
+
+        <div className="mt-5 text-center text-white">
+          <p className="font-[var(--font-space-grotesk)] text-xl font-bold">
+            {cert.title}
+          </p>
+          <p className="mt-1 font-mono text-xs text-white/60">
+            {cert.issuer} · {cert.year}
+          </p>
+
+          {cert.href && (
+            <a
+              href={cert.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#FF5C35] px-5 py-2 text-sm font-semibold !text-[#111111] transition-opacity hover:opacity-80"
+            >
+              {isID ? "Lihat kredensial" : "View credential"} ↗
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
    CONTACT
 ========================================================= */
 
@@ -190,7 +363,7 @@ const contacts: { key: ContactKey; label: string; href: string }[] = [
   { key: "email", label: "Email", href: "mailto:albarfahrezi7@gmail.com" },
   { key: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/albar-fahrezi-65b30a395/" },
   { key: "github", label: "GitHub", href: "https://github.com/AlbarFahrezi" },
-  
+  { key: "phone", label: "Phone", href: "" }, // contoh: "tel:+6281234567890"
   { key: "instagram", label: "Instagram", href: "https://www.instagram.com/rzexxtr/" },
   { key: "youtube", label: "YouTube", href: "" },
 ];
@@ -284,6 +457,7 @@ export default function Home() {
   const active = useActiveSection(navItems.map((item) => item.id));
 
   const [hovered, setHovered] = useState<number | null>(null);
+  const [activeCert, setActiveCert] = useState<Certificate | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const roles = isID
@@ -313,7 +487,7 @@ export default function Home() {
               className="font-[var(--font-space-grotesk)] text-lg font-bold tracking-[-0.05em]"
             >
               ALBAR
-              <span className="text-[#FF5C35]"></span>
+              <span className="text-[#FF5C35]">.</span>
             </Link>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -433,10 +607,6 @@ export default function Home() {
       <HeroStage>
         <div className="animate-fade-in flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/60 sm:text-sm">
           
-
-          {isID
-            ? ""
-            : ""}
         </div>
 
         <div>
@@ -456,20 +626,10 @@ export default function Home() {
             </div>
 
             <div className="animate-fade-up-delay lg:ml-auto lg:max-w-md">
-              <p className="text-base leading-7 text-white/60 md:text-lg md:leading-8">
-                {isID
-                  ? ""
-                  : ""}
-              </p>
+              
 
               <div className="mt-8 flex flex-wrap items-center gap-6">
-                <MagneticLink
-                  href="#projects"
-                  className="inline-flex items-center gap-3 border-b-2 border-white pb-2 text-sm font-semibold md:text-base"
-                >
-                  {isID ? "Lihat project saya" : "Explore my projects"}
-                  <span className="text-[#FF5C35]">↗</span>
-                </MagneticLink>
+                
 
                 <MagneticLink
                   href="/cv.pdf"
@@ -484,9 +644,6 @@ export default function Home() {
 
           <div className="animate-fade-up-delay-2 mt-12 border-t border-white/20 pt-5">
             <div className="flex flex-col justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50 sm:flex-row sm:text-xs">
-              <span>
-                {isID ? "Scroll untuk melihat ↓" : "Scroll to explore ↓"}
-              </span>
             </div>
           </div>
         </div>
@@ -646,42 +803,60 @@ export default function Home() {
       </section>
 
       {/* ==================================================
-          API TERMINAL
+          CERTIFICATES
       ================================================== */}
 
-      <section className="bg-[#111111] text-white">
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-[0.4fr_0.6fr] lg:items-center lg:px-10 lg:py-32">
-          <Reveal variant="left">
-            <div>
-              <h2 className="font-[var(--font-space-grotesk)] text-4xl font-bold leading-[1] tracking-[-0.06em] md:text-5xl">
-                {isID ? (
-                  <>
-                    Backend yang
-                    <br />
-                    bisa dibaca.
-                  </>
-                ) : (
-                  <>
-                    Backend you
-                    <br />
-                    can read.
-                  </>
-                )}
-              </h2>
+      <section
+        id="certificates"
+        className="border-t border-[#111111]/10 bg-[#111111] text-white"
+      >
+        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
+          <Reveal>
+            <div className="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
+              <div>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
+                  03 — {isID ? "Sertifikat" : "Certificates"}
+                </p>
 
-              <p className="mt-6 max-w-sm text-base leading-7 text-white/60">
-                {isID
-                  ? "Cuplikan request dan response dari tiga API yang saya bangun selama PKL."
-                  : "Sample requests and responses from the three APIs I built during my internship."}
-              </p>
+                <h2 className="font-[var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] md:text-6xl">
+                  {isID ? (
+                    <>
+                      Bukti proses
+                      <br />
+                      <span className="text-white/40">belajar.</span>
+                    </>
+                  ) : (
+                    <>
+                      Proof of
+                      <br />
+                      <span className="text-white/40">learning.</span>
+                    </>
+                  )}
+                </h2>
+              </div>
+
+
             </div>
           </Reveal>
 
-          <Reveal variant="right" delay={120}>
-            <TerminalDemo />
-          </Reveal>
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            {certificates.map((cert, index) => (
+              <Reveal key={cert.title} delay={index * 120}>
+                <CertificateCard
+                  cert={cert}
+                  onOpen={() => setActiveCert(cert)}
+                />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
+
+      <CertificateLightbox
+        cert={activeCert}
+        isID={isID}
+        onClose={() => setActiveCert(null)}
+      />
 
       {/* ==================================================
           PROJECTS
@@ -696,7 +871,7 @@ export default function Home() {
             <div className="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
               <div>
                 <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
-                  03 — {isID ? "Project Pilihan" : "Selected Projects"}
+                  04 — {isID ? "Project Pilihan" : "Selected Projects"}
                 </p>
 
                 <h2 className="font-[var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] md:text-6xl">
@@ -811,21 +986,21 @@ export default function Home() {
             <div className="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
               <div>
                 <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
-                  04 — {isID ? "Pendidikan" : "Education"}
+                  05 — {isID ? "Pendidikan" : "Education"}
                 </p>
 
                 <h2 className="font-[var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] md:text-6xl">
                   {isID ? (
                     <>
-                      Riwayat
+                      Tempat saya
                       <br />
-                      <span className="text-white/40">Pendidikan.</span>
+                      <span className="text-white/40">belajar.</span>
                     </>
                   ) : (
                     <>
-                      Educational
+                      Where I
                       <br />
-                      <span className="text-white/40">Background.</span>
+                      <span className="text-white/40">studied.</span>
                     </>
                   )}
                 </h2>
@@ -833,8 +1008,8 @@ export default function Home() {
 
               <p className="max-w-sm text-base leading-7 text-white/60">
                 {isID
-                  ? ""
-                  : ""}
+                  ? "Klik logo untuk membuka halaman sekolah."
+                  : "Click a logo to visit the school page."}
               </p>
             </div>
           </Reveal>
@@ -861,7 +1036,7 @@ export default function Home() {
           <Reveal variant="left">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
-                05 — {isID ? "Skill" : "Skills"}
+                06 — {isID ? "Skill" : "Skills"}
               </p>
 
               <h2 className="mt-4 font-[var(--font-space-grotesk)] text-4xl font-bold tracking-[-0.06em] md:text-5xl">
@@ -897,7 +1072,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 py-24 text-center lg:px-10 lg:py-32">
           <Reveal>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">
-              06 — {isID ? "Kontak" : "Contact"}
+              07 — {isID ? "Kontak" : "Contact"}
             </p>
           </Reveal>
 

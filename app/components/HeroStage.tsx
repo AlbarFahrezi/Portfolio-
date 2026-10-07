@@ -92,7 +92,7 @@ export default function HeroStage({ children }: { children: ReactNode }) {
               className="mask-inner block"
               style={{ animationDelay: "400ms" }}
             >
-              Fahrezi<span className="text-[#FF5C35]"></span>
+              Fahrezi
             </span>
           </span>
         </span>
@@ -102,7 +102,7 @@ export default function HeroStage({ children }: { children: ReactNode }) {
       <div className="animate-fade-up-delay pointer-events-none absolute inset-x-0 bottom-0 top-[5%] z-20 flex items-end justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/albar-casual.jpg"
+          src="/images/albar-hero.png"
           alt="Albar Fahrezi"
           draggable={false}
           fetchPriority="high"
@@ -112,10 +112,12 @@ export default function HeroStage({ children }: { children: ReactNode }) {
               "translate3d(calc(var(--mx, 0) * -18px), calc(var(--my, 0) * -10px + var(--sy, 0) * 0.07px), 0)",
             transition: smooth,
             filter: "drop-shadow(0 30px 50px rgba(0,0,0,0.55))",
-            maskImage:
-              "linear-gradient(to bottom, black 76%, transparent 100%)",
             WebkitMaskImage:
-              "linear-gradient(to bottom, black 76%, transparent 100%)",
+              "linear-gradient(to bottom, black 72%, transparent 100%), linear-gradient(to right, transparent 0%, black 18%, black 82%, transparent 100%)",
+            maskImage:
+              "linear-gradient(to bottom, black 72%, transparent 100%), linear-gradient(to right, transparent 0%, black 18%, black 82%, transparent 100%)",
+            WebkitMaskComposite: "source-in",
+            maskComposite: "intersect",
           }}
         />
       </div>

@@ -3,32 +3,16 @@
 import Link from "next/link";
 import ProjectVisual from "@/app/components/ProjectVisual";
 import { useLanguage } from "@/app/components/LanguageProvider";
+import { Reveal, TerminalDemo } from "@/app/components/AnimatedExtras";
+import { WORKFLOW_SCRIPTS } from "@/app/components/apiScripts";
 
 const workflowSteps = [
-  {
-    id: "Draft",
-    en: "Draft",
-  },
-  {
-    id: "Submit",
-    en: "Submit",
-  },
-  {
-    id: "Review",
-    en: "Review",
-  },
-  {
-    id: "Approve",
-    en: "Approve",
-  },
-  {
-    id: "Reject",
-    en: "Reject",
-  },
-  {
-    id: "Workflow History",
-    en: "Workflow History",
-  },
+  "Draft",
+  "Submit",
+  "Review",
+  "Approve",
+  "Reject",
+  "Workflow History",
 ];
 
 export default function ApprovalWorkflowPage() {
@@ -44,7 +28,7 @@ export default function ApprovalWorkflowPage() {
             href="/"
             className="font-[var(--font-space-grotesk)] text-lg font-bold tracking-[-0.05em]"
           >
-            ALBAR<span className="text-[#FF5C35]"></span>
+            ALBAR
           </Link>
 
           <Link
@@ -138,7 +122,7 @@ export default function ApprovalWorkflowPage() {
         </div>
       </section>
 
-      {/* WORKFLOW */}
+      {/* FEATURES */}
       <section className="border-t border-[#111111]/10 bg-[#111111] text-white">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
@@ -146,20 +130,50 @@ export default function ApprovalWorkflowPage() {
           </p>
 
           <div className="mt-12 grid gap-0 md:grid-cols-2">
-            {workflowSteps.map((step, index) => (
-              <div
-                key={step.en}
-                className="border-t border-white/20 py-6"
-              >
+            {workflowSteps.map((item, index) => (
+              <div key={item} className="border-t border-white/20 py-6">
                 <span className="text-sm text-[#FF5C35]">
-                  0{index + 1}
+                  {(index + 1).toString().padStart(2, "0")}
                 </span>
 
                 <h3 className="mt-3 font-[var(--font-space-grotesk)] text-2xl font-bold">
-                  {isID ? step.id : step.en}
+                  {item}
                 </h3>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* REQUEST & RESPONSE */}
+      <section className="border-t border-[#111111]/10 bg-white">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+          <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
+              04 — Request &amp; Response
+            </p>
+
+            <div>
+              <h2 className="font-[var(--font-space-grotesk)] text-3xl font-bold tracking-[-0.05em] md:text-5xl">
+                {isID ? "API saat dijalankan." : "The API in action."}
+              </h2>
+
+              <p className="mt-6 max-w-2xl text-base leading-8 text-[#6B6B6B] md:text-lg">
+                {isID
+                  ? "Contoh request dan response dari endpoint project ini."
+                  : "Sample requests and responses from this project's endpoints."}
+              </p>
+
+              <Reveal className="mt-10" delay={80}>
+                <TerminalDemo scripts={WORKFLOW_SCRIPTS} />
+
+                <p className="mt-4 text-xs text-[#6B6B6B]">
+                  {isID
+                    ? "Cuplikan ilustrasi. Nilai data hanya contoh."
+                    : "Illustrative snippet. Data values are examples."}
+                </p>
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
@@ -168,7 +182,7 @@ export default function ApprovalWorkflowPage() {
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr]">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35]">
-            04 — {isID ? "Pembelajaran" : "Learning"}
+            05 — {isID ? "Pembelajaran" : "Learning"}
           </p>
 
           <div>
@@ -196,5 +210,5 @@ export default function ApprovalWorkflowPage() {
         </div>
       </footer>
     </main>
-  );  
+  );
 }

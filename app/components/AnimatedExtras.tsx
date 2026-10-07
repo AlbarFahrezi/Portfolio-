@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import type { ApiScript } from "./apiScripts";
 import { usePathname } from "next/navigation";
 import {
   useEffect,
@@ -567,47 +568,7 @@ export function MagneticLink({
    12. TERMINAL API DEMO
 ========================================================= */
 
-const API_SCRIPTS = [
-  {
-    label: "Authentication API",
-    cmd: `curl -X POST /api/login -d '{"email":"admin@mail.com"}'`,
-    lines: [
-      `HTTP/1.1 200 OK`,
-      `{`,
-      `  "message": "Login successful",`,
-      `  "role": "administrator",`,
-      `  "token": "1|Xk9f...q2Zt"`,
-      `}`,
-    ],
-  },
-  {
-    label: "Inventory API",
-    cmd: `curl /api/products?low_stock=true`,
-    lines: [
-      `HTTP/1.1 200 OK`,
-      `{`,
-      `  "data": [`,
-      `    { "name": "Kabel LAN", "stock": 4 },`,
-      `    { "name": "Mouse USB", "stock": 2 }`,
-      `  ]`,
-      `}`,
-    ],
-  },
-  {
-    label: "Approval Workflow",
-    cmd: `curl -X POST /api/submissions/12/approve`,
-    lines: [
-      `HTTP/1.1 200 OK`,
-      `{`,
-      `  "id": 12,`,
-      `  "status": "approved",`,
-      `  "approved_by": "manager"`,
-      `}`,
-    ],
-  },
-];
-
-export function TerminalDemo() {
+export function TerminalDemo({ scripts }: { scripts: ApiScript[] }) {
   const boxRef = useRef<HTMLDivElement | null>(null);
   const [started, setStarted] = useState(false);
   const [reduce, setReduce] = useState(false);
@@ -640,7 +601,7 @@ export function TerminalDemo() {
   useEffect(() => {
     if (!started || reduce) return;
 
-    const script = API_SCRIPTS[idx];
+    const script = scripts[idx];
     let timer = 0;
 
     if (typed < script.cmd.length) {
@@ -649,16 +610,16 @@ export function TerminalDemo() {
       timer = window.setTimeout(() => setShown(shown + 1), shown === 0 ? 420 : 130);
     } else {
       timer = window.setTimeout(() => {
-        setIdx((idx + 1) % API_SCRIPTS.length);
+        setIdx((idx + 1) % scripts.length);
         setTyped(0);
         setShown(0);
       }, 2800);
     }
 
     return () => window.clearTimeout(timer);
-  }, [started, reduce, idx, typed, shown]);
+  }, [started, reduce, idx, typed, shown, scripts]);
 
-  const script = API_SCRIPTS[idx];
+  const script = scripts[idx];
   const typedCount = reduce ? script.cmd.length : typed;
   const shownCount = reduce ? script.lines.length : shown;
   const typingDone = typedCount >= script.cmd.length;
@@ -680,7 +641,7 @@ export function TerminalDemo() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {API_SCRIPTS.map((item, i) => (
+          {scripts.map((item, i) => (
             <span
               key={item.label}
               className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-colors duration-300 ${
@@ -695,7 +656,7 @@ export function TerminalDemo() {
         </div>
       </div>
 
-      <div className="min-h-[300px] p-5 font-mono text-[13px] leading-6 text-white/75">
+      <div className="min-h-[340px] p-5 font-mono text-[13px] leading-6 text-white/75">
         <p className="whitespace-pre-wrap break-all">
           <span className="text-[#FF5C35]">$</span>{" "}
           {script.cmd.slice(0, typedCount)}
@@ -707,7 +668,11 @@ export function TerminalDemo() {
             <pre
               key={`${idx}-${i}`}
               className={`animate-fade-in ${
-                line.startsWith("HTTP") ? "text-[#4ADE80]" : ""
+                line.startsWith("HTTP")
+                  ? / [45]\d\d/.test(line)
+                    ? "text-[#FF6B6B]"
+                    : "text-[#4ADE80]"
+                  : ""
               }`}
             >
               {line}
