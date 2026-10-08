@@ -13,6 +13,7 @@ import {
   JourneyTimeline,
   MagneticLink,
   CursorPreview,
+  HeroNetwork,
 } from "./components/AnimatedExtras";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
@@ -487,7 +488,7 @@ export default function Home() {
               className="font-[var(--font-space-grotesk)] text-lg font-bold tracking-[-0.05em]"
             >
               ALBAR
-              <span className="text-[#FF5C35]">.</span>
+              
             </Link>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -1062,11 +1063,21 @@ export default function Home() {
 
       <section
         id="contact"
-        className="border-t border-[#111111]/10 bg-[#FF5C35] text-[#111111]"
+        className="relative isolate overflow-hidden border-t border-white/10 bg-[#111111] text-white"
       >
+        <div
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 55% at 50% 100%, rgba(255,92,53,0.28), rgba(255,92,53,0) 70%)",
+          }}
+        />
+
+        <HeroNetwork variant="dark" />
+
         <div className="mx-auto max-w-7xl px-6 py-24 text-center lg:px-10 lg:py-32">
           <Reveal>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] md:text-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF5C35] md:text-sm">
               07 — {isID ? "Kontak" : "Contact"}
             </p>
           </Reveal>
@@ -1077,20 +1088,20 @@ export default function Home() {
                 <>
                   Mari terhubung
                   <br />
-                  dan buat sesuatu.
+                  <span className="text-[#FF5C35]">dan buat sesuatu.</span>
                 </>
               ) : (
                 <>
                   Let&apos;s connect
                   <br />
-                  and build something.
+                  <span className="text-[#FF5C35]">and build something.</span>
                 </>
               )}
             </h2>
           </Reveal>
 
           <Reveal delay={180}>
-            <p className="mx-auto mt-6 max-w-md text-base leading-7 text-[#111111]/70 md:text-lg">
+            <p className="mx-auto mt-6 max-w-md text-base leading-7 text-white/60 md:text-lg">
               {isID
                 ? "Punya ide, pertanyaan, atau peluang? Hubungi saya lewat salah satu kanal di bawah."
                 : "Have an idea, a question, or an opportunity? Reach me through any channel below."}
@@ -1107,12 +1118,15 @@ export default function Home() {
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel="noopener noreferrer"
                     aria-label={item.label}
-                    style={{ background: brandBackground[item.key] }}
-                    className={`group relative flex h-14 w-14 items-center justify-center ${brandShape[item.key]} !text-white shadow-[0_8px_20px_rgba(0,0,0,0.18)] ring-2 ring-[#F5F3EE] transition-all duration-300 hover:-translate-y-1.5 hover:scale-110 hover:shadow-[0_14px_28px_rgba(0,0,0,0.28)]`}
+                    style={{
+                      background: brandBackground[item.key],
+                      animationDelay: `${index * 0.35}s`,
+                    }}
+                    className={`group relative flex h-14 w-14 items-center justify-center ${brandShape[item.key]} !text-white shadow-[0_8px_20px_rgba(0,0,0,0.18)] ring-2 ring-white/25 float-soft transition-all duration-300 hover:-translate-y-1.5 hover:scale-110 hover:shadow-[0_14px_28px_rgba(0,0,0,0.28)]`}
                   >
                     <ContactIcon name={item.key} />
 
-                    <span className="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-[#111111] px-3 py-1 text-[11px] font-semibold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    <span className="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-[#FF5C35] px-3 py-1 text-[11px] font-semibold text-[#111111] opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                       {item.label}
                     </span>
                   </a>
@@ -1135,7 +1149,7 @@ export default function Home() {
           FOOTER
       ================================================== */}
 
-      <footer className="bg-[#111111] px-6 py-8 text-white lg:px-10">
+      <footer className="border-t border-white/10 bg-[#111111] px-6 py-8 text-white lg:px-10">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-white/50 sm:flex-row">
           <span>
             © 2026 Albar.{" "}

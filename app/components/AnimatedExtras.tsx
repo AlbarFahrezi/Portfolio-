@@ -1208,19 +1208,6 @@ export function IntroLoader() {
       {/* Bingkai */}
       <div className="absolute inset-4 rounded-3xl border border-[#111111]/20 md:inset-5" />
 
-      {/* Header kecil */}
-      <div className="absolute left-9 top-9 font-[var(--font-space-grotesk)] text-sm font-bold tracking-[-0.04em] md:left-12 md:top-12">
-        ALBAR<span className="text-[#FF5C35]">.</span>
-      </div>
-
-      <button
-        type="button"
-        onClick={() => setLeaving(true)}
-        className="absolute right-9 top-8 rounded-full border border-[#111111]/20 px-4 py-1.5 text-xs font-semibold text-[#6B6B6B] transition-colors hover:border-[#FF5C35] hover:text-[#FF5C35] md:right-12 md:top-11"
-      >
-        Skip ↗
-      </button>
-
       {/* Sapaan */}
       <div className="relative flex h-full flex-col items-center justify-center px-6">
         <div className="flex items-center gap-4 md:gap-8">
