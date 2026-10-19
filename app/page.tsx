@@ -198,12 +198,7 @@ const certificates: Certificate[] = [
     year: "2024",
     image: "/images/certificates/cert-2.jpg",
   },
-  {
-    title: "Nama Sertifikat 3",
-    issuer: "Penyelenggara",
-    year: "2026",
-    image: "/images/certificates/cert-3.jpg",
-  },
+ 
 ];
 
 function CertificateCard({
@@ -219,7 +214,7 @@ function CertificateCard({
     <button
       type="button"
       onClick={onOpen}
-      className="group block w-full text-left"
+      className="group block w-full rounded-2xl text-left outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C35] focus-visible:ring-offset-8 focus-visible:ring-offset-[#111111]"
     >
       <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-[#F5F3EE] transition-transform duration-500 ease-out group-hover:-translate-y-2">
         {failed ? (
@@ -633,7 +628,7 @@ export default function Home() {
                 
 
                 <MagneticLink
-                  href="/cv.pdf"
+                  href="/Albar-Fahrezi-CV.pdf"
                   download
                   className="inline-flex items-center rounded-full bg-[#F5F3EE] px-5 py-2.5 text-sm font-semibold !text-[#111111] hover:bg-[#FF5C35] hover:!text-white"
                 >
@@ -840,9 +835,13 @@ export default function Home() {
             </div>
           </Reveal>
 
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="flex flex-wrap justify-center gap-10">
             {certificates.map((cert, index) => (
-              <Reveal key={cert.title} delay={index * 120}>
+              <Reveal
+                key={cert.title}
+                delay={index * 120}
+                className="w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.67rem)]"
+              >
                 <CertificateCard
                   cert={cert}
                   onOpen={() => setActiveCert(cert)}
