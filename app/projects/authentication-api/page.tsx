@@ -205,7 +205,7 @@ export default function AuthenticationApiPage() {
           <span>Authentication API</span>
 
           <Link href="/#projects" className="hover:opacity-60">
-            {isID ? "Kembali ke Project ↗" : "Back to Projects ↗"}
+            
           </Link>
         </div>
       </footer>

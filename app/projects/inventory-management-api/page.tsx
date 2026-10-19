@@ -210,7 +210,7 @@ export default function InventoryManagementApiPage() {
           <span>Inventory Management API</span>
 
           <Link href="/#projects" className="hover:opacity-60">
-            {isID ? "Kembali ke Project ↗" : "Back to Projects ↗"}
+            
           </Link>
         </div>
       </footer>
