@@ -1137,7 +1137,7 @@ export function IntroLoader() {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    if (seen || reduce || !isHome) setActive(false);
+    if (seen || !isHome) setActive(false);
   }, [isHome]);
 
   /* Kunci scroll selama intro */
