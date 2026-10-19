@@ -1148,14 +1148,14 @@ export default function Home() {
           FOOTER
       ================================================== */}
 
-      <footer className="border-t border-white/10 bg-[#111111] px-6 py-8 text-white lg:px-10">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-white/50 sm:flex-row">
+           <footer className="border-t border-white/10 bg-[#111111] px-6 py-10 text-white lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 text-center text-xs text-white/50 sm:flex-row sm:gap-4 sm:text-left sm:text-sm">
           <span>
             © 2026 Albar.{" "}
             {isID ? "Semua hak dilindungi." : "All rights reserved."}
           </span>
 
-          <span>Built with Next.js &amp; Tailwind CSS</span>
+          
         </div>
       </footer>
 
